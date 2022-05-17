@@ -1,0 +1,1050 @@
+﻿@model QuanLyCovidDHH.Web.Models.SinhVien.TaoMoi
+@{
+    ViewData["Title"] = "SinhVien";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="table--database">
+    <div class="container">
+        <div class="section--title">
+            <h3>DANH SÁCH THÔNG TIN SINH VIÊN </h3>
+            <hr />
+            <form>
+                <div class="row">
+                    <div class="col">
+                        <label>Trường</label>
+                        <select class="form-control" id="timkiem-timtheoIDTruong" onclick="TruongChanged(this)"> 
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Khoa</label>
+                        <select class="form-control" id="timkiem-timtheoIDKhoa" onclick="KhoaChanged(this)"> 
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Khoá học</label>
+                        <select class="form-control" id="timkiem-timtheoIDKhoaHoc">
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Tìm theo họ tên sinh viên</label>
+                        <input type="text" class="form-control" id="timkiem-timtheotukhoa">
+                    </div>
+                    <!--  <div class="col">
+                        <label>Skill</label>
+                        <input type="text" class="form-control" id="timkiem-timtheoskill">
+                    </div>
+                    -->
+                </div>
+                <div class="row d-flex justify-content-between" style="padding: 15px">
+                    <a class="btn btn-success" id="btnAdd" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fa fa-plus"></i>
+                        <span>Thêm mới</span>
+                    </a>
+                
+                    <a class="btn btn-primary" id="btnSearch">
+                        <i class="fa fa-search"></i>
+                        <span>Tìm kiếm</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+      
+        <div class="box-bordertop"> 
+        
+       
+            <table class="table table-hover table-bordered" id="table-full">
+         
+         
+            </table>
+                  
+                  <button class="btn btn-success" onclick="exportTableToExcel('table-full', 'sinhvien-data')">Xuất File Excel</button>
+                 
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalSinhVien" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-center m-2" id="modal-title">SINH VIÊN</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form enctype="multipart/form-data" id="formSinhVien" method="post">
+                    <div class="modal-body">
+                        <input type="text" hidden id="hiddenvalue" value="" /> <!--Phân biệt nút Lưu lại trong Tạo mới và Chỉnh sửa-->
+                        <div class="errorTxt form-group" id="errorTxt"></div> <!--Khu vực validate-->
+                      
+                 <div id="IDTruongAll"class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên trường</label>
+                                   
+                                     <select class="form-control" id="IDTruong" onclick="Truong2Changed(this)">
+                                       
+                                    </select>
+
+                                </div>
+                            </div>
+                           
+                      </div>
+                     <div id="IDKhoaAll" class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên Khoa</label>
+                                   
+                                     <select class="form-control" id="IDKhoa" onclick="Khoa2Changed(this)" >
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                        <div id="IDKhoaHocAll" class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Khoá học</label>
+                                        <select class="form-control" id="IDKhoaHoc" >
+                                              </select>
+                                </div>
+                            </div>
+                        </div>
+                          <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Số CMND_CCCD</label>
+                                    <input id="soCMND_CCCD" name="soCMND_CCCD" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Họ tên</label>
+                                    <input id="hoTen" name="hoTen" class="form-control" type="text" />
+                                </div>
+                            </div>
+                          
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Địa chỉ</label>
+                                    <input id="diaChi" name="diaChi" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Số điện thoại</label>
+                                    <input id="sDT" name="sDT" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Email</label>
+                                    <input id="email" name="email" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tổng mũi tiêm</label>
+                                    <input id="tongMuiTiem" name="tongMuiTiem" class="form-control" type="number" disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Đã mắc Covid</label>
+                                    <input id="daMacCovid" name="daMacCovid" class="form-control"  type="text" disabled />
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên đăng nhập</label>
+                                    <input id="tenDangNhap" name="tenDangNhap" class="form-control" type="text" disabled/>
+                                </div>
+                            </div>
+                        </div>   
+                                 <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">matKhau</label>
+                                    <input id="matKhau" name="matKhau" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>   
+
+                        <div class="form-group">
+                            <div id="trangThai" name="trangThai">
+                                <label>Trạng thái: </label>
+                                <input type="radio" id="trangThai" name="trangThai" value="1" />Tạm dừng
+                                <input type="radio" id="trangThai" name="trangThai" value="0" />Đang hoạt động
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="btnSubmit">Lưu lại</button>
+                            <button type="button" class="btn btn-secondary" id="btnClose" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notification">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="notiMessenger"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnConfirm">Xác nhận</button>
+                <button type="button" class="btn btn-danger" id="btnClose" data-dismiss="modal">Đóng lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<form enctype="multipart/form-data">
+    <input id="upload" type=file  name="files[]" onchange="handleFileSelect()">
+
+</form>
+     <button id="nhapdulieu" onclick=" InpuExcel()">nhập dữ liệu</button>
+    <textarea class="form-control" rows=35 cols=120 id="xlx_json"></textarea>
+ 
+ 
+
+@section scripts{
+
+      
+
+    <script>
+
+
+        $(document).ready(function () {
+              
+            Load_Danhsach_SinhVien();
+            Load_DSTruong_Combobox();
+            Load_DSKhoa_Combobox();
+            ValidateForm();
+            $('#trangThai').hide();
+            //$('#ngayBanHanh').datepicker();
+
+
+        });
+        function ResetForm() {
+            
+            $('#soCMND_CCCD').val('');
+             $('#hoTen').val('');
+            $('#diaChi').val('');
+           $('#sDT').val('');
+            $('#email').val('');
+
+          
+
+        };
+         function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+        function ValidateForm() {
+            $("form[id='formSinhVien']").validate({
+                rules: {
+                    maKhoa: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                    tenKhoa: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                  
+                   
+                },
+                messages: {
+                    maKhoa: {
+                        required: "Vui lòng nhập Mã khoa",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 kí tự"
+                    },
+                    tenKhoa: {
+                        required: "Vui lòng nhập Tên khoa",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 ký tự"
+                    },
+                
+                    
+                },
+                errorElement: 'div',
+                errorLabelContainer: '.errorTxt',
+                submitHandler: function (form) {
+                }
+            });
+        }
+        $('#btnAdd').click(function () {
+            ResetForm();
+         
+      
+          $('#hiddenvalue').val(''); // Hidden id
+            $('#IDTruongAll').show();
+            $('#IDKhoaAll').show();
+            $('#IDKhoaHocAll').show();
+            $('#modalSinhVien').modal();
+        });
+        function Load_Danhsach_SinhVien() {
+            TaoBang();  
+    
+            $.ajax({
+                url: 'SinhVien/DanhSach',
+                type: 'GET',
+                data: {
+                     IDKhoaHoc: null,
+                     IDKhoa: null,
+                    IDTruong: null,
+                    TuKhoa:null
+             
+
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        let stt = 0;
+
+                        $.each(data.sinhvien, function (key, value) {
+
+                             stt = stt + 1;
+
+                            let tr = '<tr id="' + value.idSinhVien+ '">';
+                            tr += '<td>' + stt + '</td>';  
+                            tr += '<td>' + value.hoTen + '</td>';
+                            tr += '<td>' + value.tenDangNhap + '</td>';
+                            tr += '<td>' + value.tongMuiTiem + '</td>';
+                            tr += '<td>' + value.daMacCovid + '</td>';
+                            tr += '<td>' + value.khoaHoc + '</td>';
+                            tr += '<td>' + value.tenKhoa + '</td>';
+                            tr += '<td>' + value.tenTruong + '</td>';
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+
+                            //////////
+                           
+
+                    /////
+                        });
+                   Load_PhanTrang();
+                    }
+                }
+            });
+        };
+
+        $('#btnSearch').click(function () {
+                //Xoa_PhanTrang();      
+            let select1 = document.getElementById('timkiem-timtheoIDTruong');
+            let option1 = select1.options[select1.selectedIndex];
+            let idtruong = option1.value;
+
+            let select2 = document.getElementById('timkiem-timtheoIDKhoa');
+            let option2 = select2.options[select2.selectedIndex];
+            let idkhoa = option2.value;
+
+             let select3 = document.getElementById('timkiem-timtheoIDKhoaHoc');
+            let option3 = select3.options[select3.selectedIndex];
+            let idkhoahoc = option3.value;
+            let tukhoa = $('#timkiem-timtheotukhoa').val();
+            //alert(idtruong+idkhoa+idkhoahoc);
+            $.ajax({
+                url: 'SinhVien/DanhSach',
+                type: 'GET',
+                data: {
+                    IDKhoaHoc:idkhoahoc,
+                    IDKhoa: idkhoa,
+                    IDTruong: idtruong,
+                    TuKhoa: tukhoa,
+              
+                },
+                success: function (data) {
+               if (data.code == 200) {
+                        let stt = 0;
+              
+                        $('#table-full').empty();
+                       
+                        TaoBang();
+                         
+                        $.each(data.sinhvien, function (key, value) {
+                             stt = stt + 1;
+                            //Convert Datetime to String
+                            @*let today = new Date(value.ngayBanHanh);
+                            let dd = String(today.getDate()).padStart(2, '0');
+                            let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy = today.getFullYear();
+                            today = dd + '/' + mm + '/' + yyyy;*@
+
+                                let tr = '<tr id="' + value.idSinhVien+ '">';
+                            tr += '<td>' + stt + '</td>';  
+                            tr += '<td>' + value.hoTen + '</td>';
+                            tr += '<td>' + value.tenDangNhap + '</td>';
+                            tr += '<td>' + value.tongMuiTiem + '</td>';
+                            tr += '<td>' + value.daMacCovid + '</td>';
+                            tr += '<td>' + value.khoaHoc + '</td>';
+                            tr += '<td>' + value.tenKhoa + '</td>';
+                            tr += '<td>' + value.tenTruong + '</td>';
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+                        });
+                        destroy();
+                   //Load_PhanTrang();
+                       
+                    }
+                }
+            });
+        });
+
+       function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+
+        $('#btnSubmit').click(function () {
+            let hiddenvalue = $('#hiddenvalue').val();
+            let IDKhoaHoc = $('#IDKhoaHoc').val().trim();
+            let SoCMND_CCCD = $('#soCMND_CCCD').val().trim();
+            let HoTen = $('#hoTen').val().trim();
+            let DiaChi = $('#diaChi').val().trim();
+            let SDT = $('#sDT').val().trim();
+            let Email = $('#email').val().trim();
+
+
+
+            //let trangThai = $('input[id="trangThai"]:checked').val();
+
+            let formData1 = new FormData();
+
+
+            formData1.append('IDKhoaHoc', IDKhoaHoc);
+            formData1.append('SoCMND_CCCD', SoCMND_CCCD);
+            formData1.append('HoTen', HoTen);
+            formData1.append('DiaChi', DiaChi);
+            formData1.append('SDT', SDT);
+            formData1.append('Email', Email);
+           
+
+            let MatKhau = $('#matKhau').val().trim();
+
+
+            let formData2 = new FormData();
+            formData2 = formData1;
+            formData2.append('IDSinhVien', hiddenvalue);
+
+            formData2.append('MatKhau', MatKhau);
+         
+         
+            //formData2.append('trangThai', trangThai);
+           
+          
+
+            if ($("#formSinhVien").valid()) {
+                if (hiddenvalue.length == 0) {
+                   
+                    //Thêm mới
+                    $.ajax({
+                        url: '/SinhVien/TaoMoi',
+                        type: 'POST',
+                        data: formData1,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                console.log(formData1);
+                                ResetForm();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                                $('#table-body').empty();
+                                 $('#btnSearch').click();
+                            } else {
+                                      
+
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    });
+                }
+                else if (hiddenvalue.length != 0) {
+                    //Chỉnh sửa
+
+                    $.ajax({
+                        url: '/SinhVien/ChinhSua',
+                        type: 'PUT',
+                        data: formData2,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                $('#table-body').empty();
+                                 $('#btnSearch').click();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    })
+                }
+            }
+        });
+
+         $(document).on('click', "button[name='edit']", function () {
+            ResetForm();
+
+          
+            let id = $(this).closest('tr').attr('id');
+            $('#hiddenvalue').val(id);
+                 
+
+                   
+             
+             
+            $.ajax({
+                url: '/SinhVien/LayTheoID',
+                type: 'GET',
+                data: { id: id },
+                success: function (data) {
+              
+                //$("#IDTruong").val(data.sinhvien.iDTruong).change();
+                //    alert(data.sinhvien.iDTruong);
+                //let IDTruong = data.sinhvien.idTruong;
+             
+                //let IDKhoa=data.sinhvien.idKhoa;
+      
+
+                //  Load_Khoa_Combobox_ChinhSua(IDTruong,IDKhoa);
+                //     TAI DU LIEU KHOA COMBOBOX
+              
+                  
+                //      $('#trangThai').show();
+                //    $('#IDKhoaHoc').val(data.sinhvien.iDKhoaHoc);
+
+                    $('#IDTruongAll').hide();
+                    $('#IDKhoaAll').hide();
+                    $('#IDKhoaHocAll').hide();
+               
+                
+                                $('#soCMND_CCCD').val(data.sinhvien.soCMND_CCCD);
+               
+                                $('#hoTen').val(data.sinhvien.hoTen);
+         
+                                $('#diaChi').val(data.sinhvien.diaChi);
+                
+                                $('#sDT').val(data.sinhvien.sdt);
+            
+                   
+                                $('#email').val(data.sinhvien.email);
+                  
+                    
+                    $('#tongMuiTiem').val(data.sinhvien.tongMuiTiem);
+                    $('#daMacCovid').val(data.sinhvien.daMacCovid);
+                    $('#tenDangNhap').val(data.sinhvien.tenDangNhap);
+                    //$('#matKhau').val(data.sinhvien.matKhau);
+                    //alert(data.sinhvien.DiaChi +";"+data.sinhvien.diaChi +";"+data.sinhvien.sdt +";"+data.sinhvien.matKhau);
+         
+                      $('#matKhau').val(String(data.sinhvien.matKhau));
+                 
+
+                     
+                 
+                    $('#modalSinhVien').modal();
+                }
+            });
+  
+         });
+        $(document).on('click', "button[name='delete']", function () {
+            let id = $(this).closest('tr').attr('id');
+            var noti = confirm("Bạn có muốn xóa không?");
+            if (noti == true) {
+                $.ajax({
+                    url: 'SinhVien/XoaBo',
+                    type: 'DELETE',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            $('#table-body').empty();
+                            $('#btnSearch').click();
+                            ThongBao(data.msg);
+                        }
+                        else ThongBao(data.msg);
+                    }
+                })
+            } else {
+                alert("You pressed Cancel!");
+            }
+        });
+ 
+        function Load_DSTruong_Combobox() {
+            $.ajax({
+                url: 'Truong/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.truong, function (key, value) {
+                            let option = '<option  value="' + value.idTruong + '" class="form-control">' +  value.tenTruong+ '</option>';
+                            $('#timkiem-timtheoIDTruong').append(option);
+                            $('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+        };
+             function Load_DSKhoa_Combobox() {
+            $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+                            $('#IDKhoa').append(option);
+                        });
+                    }
+                }
+            });
+        };
+        function TruongChanged(obj) {
+            var message = document.getElementById('timkiem-timtheoIDTruong');
+            var value = obj.value;
+            $("#timkiem-timtheoIDKhoa").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+                    IDTruong:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+                         
+                            //$('#IDKhoa').append(option);
+                        });
+                    }
+                }
+            });
+            
+        };
+        
+        function KhoaChanged(obj) {
+            var message = document.getElementById('timkiem-timtheoIDKhoa');
+            var value = obj.value;
+            $("#timkiem-timtheoIDKhoaHoc").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDKhoaHoc').append(option);
+
+              if(value!=''){                 
+             //alert("You selected:"+value);
+                  $.ajax({
+                    url: 'KhoaHoc/DanhSach',
+                    type: 'GET',
+                    data: {
+                        IDKhoa:value
+             
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+            
+                            $.each(data.khoahoc, function (key, value) {
+                                let option = '<option  value="' + value.idKhoaHoc + '" class="form-control">' +  value.khoaHoc+ '</option>';
+                                $('#timkiem-timtheoIDKhoaHoc').append(option);
+                         
+                                //$('#IDKhoaHoc').append(option);
+                            });
+                        }
+                    }
+                });
+            }
+            
+        };
+        function Truong2Changed(obj) {
+            var message = document.getElementById('IDTruong');
+            var value = obj.value;
+            $("#IDKhoa").empty();
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+                    IDTruong:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#IDKhoa').append(option);
+                         
+                            //$('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+            
+        };
+          function Khoa2Changed(obj) {
+            var message = document.getElementById('timkiem-timtheoIDKhoa');
+            var value = obj.value;
+                        $("#IDKhoaHoc").empty();
+ 
+
+              if(value!=''){                 
+             //alert("You selected:"+value);
+                  $.ajax({
+                    url: 'KhoaHoc/DanhSach',
+                    type: 'GET',
+                    data: {
+                        IDKhoa:value
+             
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+            
+                            $.each(data.khoahoc, function (key, value) {
+                                let option = '<option  value="' + value.idKhoaHoc + '" class="form-control">' +  value.khoaHoc+ '</option>';
+                          
+                         
+                                $('#IDKhoaHoc').append(option);
+                            });
+                        }
+                    }
+                });
+            }
+            
+        };
+        function Load_Khoa_Combobox_ChinhSua(valu, selec) {
+                  
+            $("#IDKhoa").empty();
+                   $.ajax({
+                        url: 'Khoa/DanhSach',
+                        type: 'GET',
+                        data: {
+                            IDTruong:valu
+             
+                        },
+                        success: function (data) {
+       
+                            if (data.code == 200) {
+            
+                                $.each(data.khoa, function (key, value) {
+                                    let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                                    $('#IDKhoa').append(option);
+                                  
+                         
+                                 
+                                });
+                                $("#IDKhoa").val(selec).change(); 
+                            }
+                        }
+                    });
+                    
+                
+        };
+         function Load_PhanTrang() {
+    
+        
+         $('#table-full').dataTable( 
+ 
+             {
+              "language": {
+              "sProcessing":   "Đang xử lý...",
+              "sLengthMenu":   "Xem _MENU_ mục",
+              "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
+              "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+              "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
+              "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+              "sInfoPostFix":  "",
+              "sSearch":       "Tìm:",
+              "sUrl":          "",
+              "oPaginate": {
+                  "sFirst":    "Đầu",
+                  "sPrevious": "Trước",
+                  "sNext":     "Tiếp",
+                  "sLast":     "Cuối"
+                  }
+              },
+              "processing": true, // tiền xử lý trước
+              "aLengthMenu": [[ 10, 20, 50,100,1000,999999], [ 10, 20, 50,100,1000,999999]], // danh sách số trang trên 1 lần hiển thị bảng
+              "order": [[ 1, 'desc' ]] //sắp xếp giảm dần theo cột thứ 1
+             
+          } );
+        };
+
+
+        function destroy() {
+            //   $('#table-full').DataTable( {
+             
+            //} );
+            //         $('#table-full').DataTable( {
+            //    paging: false
+            //} );
+ 
+            $('#table-full').DataTable( {
+                  "bDestroy": true,
+                   
+              "language": {
+              "sProcessing":   "Đang xử lý...",
+              "sLengthMenu":   "Xem _MENU_ mục",
+              "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
+              "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+              "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
+              "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+              "sInfoPostFix":  "",
+              "sSearch":       "Tìm:",
+              "sUrl":          "",
+              "oPaginate": {
+                  "sFirst":    "Đầu",
+                  "sPrevious": "Trước",
+                  "sNext":     "Tiếp",
+                  "sLast":     "Cuối"
+                  }
+              },
+                                "aLengthMenu": [[ 10, 20, 50,100,1000,999999], [ 10, 20, 50,100,1000,999999]], 
+                //searching: false
+            } );
+             }
+        function TaoBang() {
+
+            let str = '<thead>';
+            str += '<tr>';
+            str += '<th style="width:10%">STT</th>';
+            str += '<th style="width:15%">Họ Tên</th>';
+            str += '<th style="width:15%">Mã sinh viên</th>';
+            str += '<th style="width:10%">Tổng mũi tiêm</th>';
+            str += '<th style="width:10%">Đã măc Covid</th>';
+            str += '<th style="width:10%">Khoá học</th>';
+            str += '<th style="width:10%">Tên Khoa</th>';
+            str += '<th style="width:10%">Tên Trường</th>';
+            str += '<th style="width:10%">Chức năng</th>';
+            str += '</thead>';
+            str += '<tbody id="table-body">';
+            str += '</tbody>';                              
+         $('#table-full').append(str);                  
+        };
+         
+              
+ 
+
+     function exportTableToExcel(tableID, filename = ''){
+            var downloadLink;
+            var dataType = '	application/vnd.ms-excel';
+            var tableSelect = document.getElementById(tableID);
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+            // Specify file name
+            filename = filename?filename+'.xls':'excel_data.xls';
+    
+            // Create download link element
+            downloadLink = document.createElement("a");
+    
+            document.body.appendChild(downloadLink);
+    
+            if(navigator.msSaveOrOpenBlob){
+                var blob = new Blob(['\ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob( blob, filename);
+            }else{
+                // Create a link to the file
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+                // Setting the file name
+                downloadLink.download = filename;
+        
+                //triggering the function
+                downloadLink.click();
+            }
+    }
+      
+
+
+   var ExcelToJSON = function() {
+ 
+      this.parseExcel = function(file) {
+        var reader = new FileReader();
+ 
+        reader.onload = function(e) {
+          var data = e.target.result;
+          var workbook = XLS.read(data, {
+            type: 'binary'
+          });
+           var kq=0;
+             var s1=0;
+            var s2=0;
+         
+          workbook.SheetNames.forEach(function(sheetName) {
+            // Here is your object
+            var XL_row_object = XLS.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+            var json_object = JSON.stringify(XL_row_object);
+            //alert(json_object);
+          
+        
+       
+               
+              
+   
+            console.log(JSON.parse(json_object));
+            jQuery( '#xlx_json' ).val( json_object );
+            //InpuExcel();
+          })
+        };
+ 
+        reader.onerror = function(ex) {
+          console.log(ex);
+        };
+ 
+        reader.readAsBinaryString(file);
+      };
+  };
+ 
+  function handleFileSelect() {
+    
+ 
+    var files = $('#upload')[0].files;; // FileList object
+    var xl2json = new ExcelToJSON();
+    xl2json.parseExcel(files[0]);
+  }
+ 
+       //document.getElementById('nhapdulieu').addEventListener('click', handleFileSelect, false);
+
+
+      function InpuExcel() {
+
+         var json_object = $('#xlx_json').val();
+         //alert(json_object);
+            var myObj = JSON.parse(json_object);
+        
+            var dong=1;
+            var loi=0;
+            var dongloi='';
+            $.each(myObj, function (key, value) {
+
+
+                   
+   
+                 
+                     var formData3 = new FormData();
+                    formData3.append('MaTruong', value.MaTruong);
+                    formData3.append('MaKhoa', value.MaKhoa);
+                    formData3.append('MaKhoaHoc', value.MaKhoaHoc);
+
+                    formData3.append('SoCMND_CCCD', value.SoCMND_CCCD);
+                    formData3.append('HoTen', value.HoTen);       
+                    formData3.append('DiaChi', value.DiaChi);
+                    formData3.append('SDT', value.SDT);
+                    formData3.append('Email', value.Email);
+                  
+                  
+              
+                
+                     $.ajax({
+                            url: '/SinhVien/TaoMoi_Excel',
+                            type: 'POST',
+                            data: formData3,
+                            async: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (data) {
+                                dong=dong+1;
+                                if (data.code == 200) {
+                                    console.log(formData3);
+                                 
+                                                      
+                             
+                                
+                                        
+                                } else {
+                       
+                                    loi+=1;
+                                    dongloi+=  dong+";"
+                                }
+                      
+                                                        //alert("222");
+                           }        
+                    
+                    });
+                   
+                  
+     
+                       
+
+                    
+
+           });
+             if(loi==0){
+                 ThongBao("Tất cả thành công");
+             }
+             else{
+                    ThongBao("Dòng lỗi: "+dongloi+" tổng số dòng lỗi:"+loi);
+             }
+                
+
+             $('#btnSearch').click();
+  }
+
+
+    </script>
+}

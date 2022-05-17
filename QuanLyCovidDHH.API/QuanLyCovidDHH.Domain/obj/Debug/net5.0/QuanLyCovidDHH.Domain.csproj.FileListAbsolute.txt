@@ -1,0 +1,12 @@
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\bin\Debug\net5.0\QuanLyCovidDHH.Domain.deps.json
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\bin\Debug\net5.0\QuanLyCovidDHH.Domain.dll
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\bin\Debug\net5.0\ref\QuanLyCovidDHH.Domain.dll
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\bin\Debug\net5.0\QuanLyCovidDHH.Domain.pdb
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\obj\Debug\net5.0\QuanLyCovidDHH.Domain.csproj.AssemblyReference.cache
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\obj\Debug\net5.0\QuanLyCovidDHH.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\obj\Debug\net5.0\QuanLyCovidDHH.Domain.AssemblyInfoInputs.cache
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\obj\Debug\net5.0\QuanLyCovidDHH.Domain.AssemblyInfo.cs
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\obj\Debug\net5.0\QuanLyCovidDHH.Domain.csproj.CoreCompileInputs.cache
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\obj\Debug\net5.0\QuanLyCovidDHH.Domain.dll
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\obj\Debug\net5.0\ref\QuanLyCovidDHH.Domain.dll
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.Domain\obj\Debug\net5.0\QuanLyCovidDHH.Domain.pdb

@@ -1,0 +1,17 @@
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\bin\Debug\net5.0\QuanLyCovidDHH.BLL.deps.json
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\bin\Debug\net5.0\QuanLyCovidDHH.BLL.dll
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\bin\Debug\net5.0\ref\QuanLyCovidDHH.BLL.dll
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\bin\Debug\net5.0\QuanLyCovidDHH.BLL.pdb
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\bin\Debug\net5.0\QuanLyCovidDHH.DAL.dll
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\bin\Debug\net5.0\QuanLyCovidDHH.Domain.dll
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\bin\Debug\net5.0\QuanLyCovidDHH.DAL.pdb
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\bin\Debug\net5.0\QuanLyCovidDHH.Domain.pdb
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\obj\Debug\net5.0\QuanLyCovidDHH.BLL.csproj.AssemblyReference.cache
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\obj\Debug\net5.0\QuanLyCovidDHH.BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\obj\Debug\net5.0\QuanLyCovidDHH.BLL.AssemblyInfoInputs.cache
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\obj\Debug\net5.0\QuanLyCovidDHH.BLL.AssemblyInfo.cs
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\obj\Debug\net5.0\QuanLyCovidDHH.BLL.csproj.CoreCompileInputs.cache
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\obj\Debug\net5.0\QuanLyCovidDHH.BLL.csproj.CopyComplete
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\obj\Debug\net5.0\QuanLyCovidDHH.BLL.dll
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\obj\Debug\net5.0\ref\QuanLyCovidDHH.BLL.dll
+D:\KhoaLuanTotNghiep\QuanLyCovidDHH\quanlycoviddhh\QuanLyCovidDHH.API\QuanLyCovidDHH.BAL\obj\Debug\net5.0\QuanLyCovidDHH.BLL.pdb

@@ -1,0 +1,865 @@
+﻿@model QuanLyCovidDHH.Web.Models.ChiTietTiem.TaoMoi
+@{
+    ViewData["Title"] = "ChiTietTiem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="table--database">
+    <div class="container">
+        <div class="section--title">
+            <h3>THỐNG KÊ CHI TIẾT TIÊM  </h3>
+            <hr />
+            <form>
+                <div class="row">
+                    <div class="col">
+                        <label>Trường</label>
+                        <select class="form-control" id="timkiem-timtheoIDTruong" onclick="TruongChanged(this)"> 
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Khoa</label>
+                        <select class="form-control" id="timkiem-timtheoIDKhoa" onclick="KhoaChanged(this)"> 
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Khoá học</label>
+                        <select class="form-control" id="timkiem-timtheoIDKhoaHoc">
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+
+                     <div class="col">
+                        <label>Loại Nhóm đối tượng</label>
+                         <select class="form-control" id="LoaiNhom">
+                            <option class="form-control"value="Ngay">Ngày</option>
+                  
+                            <option class="form-control"value="Vaccine">Vaccine</option>
+
+                          </select>
+                    </div>
+             @*       <div class="col">
+                        <label>Tìm theo khoá học hoặc năm tuyển sinh</label>
+                        <input type="text" class="form-control" id="timkiem-timtheotukhoa">
+                    </div>
+              *@
+
+
+                </div>
+
+
+                
+              
+                 <div class="row">
+                     <div class="col">
+                        <label>Vaccine</label>
+                        <select class="form-control" id="timkiem-timtheoIDVaccine">
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Triệu chứng sau tiêm</label>
+                        <select class="form-control" id="timkiem-timtheoTrieuChungSauTiem">
+                            <option class="form-control" value="">- Tất cả -</option>
+                            <option class="form-control" value="Không">Không </option>
+                            <option class="form-control" value="Nhẹ">Nhẹ</option>
+                            <option class="form-control" value="Nặng">Nặng</option>
+                        </select>
+                    </div>
+                     <div class="col">
+                        <label>Từ ngày</label>
+                        <input type="date"  class="form-control" id="timkiem-timtheoTuNgay" >
+                    </div> 
+                     <div class="col">
+                        <label>Đến ngày</label>
+                        <input type="date" class="form-control" id="timkiem-timtheoDenNgay">
+                    </div> 
+       
+                </div>
+
+
+                
+
+                 <div class="row" >
+             
+
+              
+                       <div class="col">
+                          <a class="btn btn-success" id="VeBieuDo"  onclick="VeBieuDo()">
+                       <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                        <span>Vẽ Biểu Đồ</span>
+                    </a>
+                         </div>
+                </div>
+
+               
+
+
+            </form>
+        </div>
+    
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalChiTietTiem" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-center m-2" id="modal-title">KHOÁ HỌC</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form enctype="multipart/form-data" id="formChiTietTiem" method="post">
+                    <div class="modal-body">
+                        <input type="text" hidden id="hiddenvalue" value="" /> <!--Phân biệt nút Lưu lại trong Tạo mới và Chỉnh sửa-->
+                        <div class="errorTxt form-group" id="errorTxt"></div> <!--Khu vực validate-->
+                      
+
+                     <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên trường</label>
+                                   
+                                     <select class="form-control" id="IDTruong" onclick="Truong2Changed(this)">
+                                       
+                                    </select>
+
+                                </div>
+                            </div>
+                           
+                        </div>
+                     <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên Khoa</label>
+                                   
+                                     <select class="form-control" id="IDKhoa" >
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Khoá học</label>
+                                    <input id="khoaHoc" name="khoaHoc" class="form-control" type="number" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Năm tuyển sinh</label>
+                                    <input id="namTuyenSinh" name="namTuyenSinh" class="form-control" type="number" />
+                                </div>
+                            </div>
+                          
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Mãkhoá học</label>
+                                    <input id="maChiTietTiem" name="maChiTietTiem" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                      
+                           
+                        <div class="form-group">
+                            <div id="trangThai" name="trangThai">
+                                <label>Trạng thái: </label>
+                                <input type="radio" id="trangThai" name="trangThai" value="1" />Tạm dừng
+                                <input type="radio" id="trangThai" name="trangThai" value="0" />Đang hoạt động
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="btnSubmit">Lưu lại</button>
+                            <button type="button" class="btn btn-secondary" id="btnClose" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="notification">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="notiMessenger"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnConfirm">Xác nhận</button>
+                <button type="button" class="btn btn-danger" id="btnClose" data-dismiss="modal">Đóng lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  <select  id="LoaiBieuDo" onchange="LoaiBieuDoChanged(this)">
+    <option value="bar">Cột</option>
+    <option value="line">Đường</option>
+
+    <option value="bubble">Bong bóng</option>
+
+    <option value="radar">Radar</option>
+  </select>
+     
+<div>
+    <canvas id="myChart" width="400" height="400"></canvas>
+
+</div>
+
+
+
+
+@section scripts{
+
+       
+
+    <script>
+          var  myChart = new Chart();
+ 
+        $(document).ready(function () {
+      
+            //Load_Danhsach_ChiTietTiem();
+            Load_DSTruong_Combobox();
+            Load_DSKhoa_Combobox();
+            Load_DSVaccine_Combobox() 
+            TaoBieuDoMau()
+            var today = new Date();
+            var lastmonth = new Date();
+ 
+            // -30 ngày
+            lastmonth.setDate(today.getDate() -30);
+            let dd1 = String(lastmonth.getDate()).padStart(2, '0');
+            let mm1 = String(lastmonth.getMonth() + 1).padStart(2, '0'); //January is 0!
+            let yyyy1 = lastmonth.getFullYear();
+            $("#timkiem-timtheoTuNgay").val(yyyy1+"-"+mm1+"-"+dd1);
+
+            let dd2 = String(today.getDate()).padStart(2, '0');
+            let mm2 = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            let yyyy2 = today.getFullYear();
+            $("#timkiem-timtheoDenNgay").val(yyyy2+"-"+mm2+"-"+dd2);
+        });
+
+     
+         function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+
+
+
+
+
+
+         
+        function Load_DSTruong_Combobox() {
+            $.ajax({
+                url: 'Truong/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.truong, function (key, value) {
+                            let option = '<option  value="' + value.idTruong + '" class="form-control">' +  value.tenTruong+ '</option>';
+                            $('#timkiem-timtheoIDTruong').append(option);
+                            $('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+        };
+             function Load_DSKhoa_Combobox() {
+            $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+                            $('#IDKhoa').append(option);
+                        });
+                    }
+                }
+            });
+        };
+          function Load_DSVaccine_Combobox() {
+            $.ajax({
+                url: 'Vaccine/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.vaccine, function (key, value) {
+                            let option = '<option  value="' + value.idVaccine + '" class="form-control">' +  value.tenVaccine+ '</option>';
+                            $('#timkiem-timtheoIDVaccine').append(option);
+                            $('#IDVaccine').append(option);
+                        });
+                    }
+                }
+            });
+        };
+        function TruongChanged(obj) {
+            var message = document.getElementById('timkiem-timtheoIDTruong');
+            var value = obj.value;
+            $("#timkiem-timtheoIDKhoa").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+                    IDTruong:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+                         
+                            //$('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+            
+        };
+        
+        function KhoaChanged(obj) {
+            var message = document.getElementById('timkiem-timtheoIDKhoa');
+            var value = obj.value;
+            $("#timkiem-timtheoIDKhoaHoc").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDKhoaHoc').append(option);
+
+                                    
+               if(value!=''){                 
+             //alert("You selected:"+value);
+                  $.ajax({
+                    url: 'KhoaHoc/DanhSach',
+                    type: 'GET',
+                    data: {
+                        IDKhoa:value
+             
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+            
+                            $.each(data.khoahoc, function (key, value) {
+                                let option = '<option  value="' + value.idKhoaHoc + '" class="form-control">' +  value.khoaHoc+ '</option>';
+                                $('#timkiem-timtheoIDKhoaHoc').append(option);
+                         
+                                //$('#IDTruong').append(option);
+                            });
+                        }
+                    }
+                });
+            }
+            
+        };
+       
+   
+
+   
+
+    function VeBieuDo(){
+            var Labels = new Array();
+            var Data_Tong_ChiTietTiem = new Array();
+            var Data_ChiTietTiem = new Array(new Array(),new Array(),new Array(),new Array(),new Array(),new Array());
+            let timtheoIDVaccine = $('#timkiem-timtheoIDVaccine').val().trim();
+            let timtheoIDSinhVien = null;
+            let timtheoIDTruong = $('#timkiem-timtheoIDTruong').val().trim();
+            let timtheoIDKhoa = $('#timkiem-timtheoIDKhoa').val().trim();
+            let timtheoIDKhoaHoc = $('#timkiem-timtheoIDKhoaHoc').val().trim();
+           
+            let TrieuChungSauTiem = $('#timkiem-timtheoTrieuChungSauTiem').val().trim();
+            let TrangThaiDuyet = null;
+            let MuiTiemThu = null;
+     
+           
+      
+       
+            let TuNgay =  $('#timkiem-timtheoTuNgay').val();
+            let DenNgay = $('#timkiem-timtheoDenNgay').val();
+            let LoaiNhom = $('#LoaiNhom').val().trim();
+            //////////// tong tat ca
+        
+
+                      
+            $.ajax({
+                url: 'ChiTietTiemThongKe/DanhSach',
+                type: 'GET',
+                async: false,
+                data: {
+                    IDVaccine: timtheoIDVaccine,
+                    IDSinhVien: null,
+                    IDKhoaHoc: timtheoIDKhoaHoc,
+                    IDKhoa: timtheoIDKhoa,
+                    IDTruong: timtheoIDTruong,
+                    TrieuChungSauTiem:TrieuChungSauTiem,
+                    TrangThaiDuyet:null,
+                    MuiTiemThu: MuiTiemThu,// gia tri tu tao
+                    TuNgay:TuNgay,
+                    DenNgay:DenNgay,
+                    LoaiNhom: LoaiNhom,
+             
+
+                },
+                success: function (data) {
+                 
+                    if (data.code == 200) {
+              
+                      
+                        $.each(data.chitiettiem, function (key, value) {
+             
+                            if(LoaiNhom=='Ngay'){
+                                    let ngayGioTiem = new Date(value.ngay);
+                                    let dd1 = String(ngayGioTiem.getDate()).padStart(2, '0');
+                                    let mm1 = String(ngayGioTiem.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                    let yyyy1 = ngayGioTiem.getFullYear();
+                                      Labels.push(dd1 + '/' + mm1 + '/' + yyyy1);                    
+                            }
+                            else{
+                                      Labels.push(value.tenVaccine);
+                           
+                             }
+                  
+                          
+                            Data_Tong_ChiTietTiem.push(value.dem);
+                
+                        });
+           
+                    }
+                }
+            });
+            ////////// da huy
+             $.ajax({
+                url: 'ChiTietTiemThongKe/DanhSach',
+                type: 'GET',
+                async: false,
+                data: {
+                     IDVaccine: timtheoIDVaccine,
+                    IDSinhVien: null,
+                    IDKhoaHoc: timtheoIDKhoaHoc,
+                    IDKhoa: timtheoIDKhoa,
+                    IDTruong: timtheoIDTruong,
+                    TrieuChungSauTiem:TrieuChungSauTiem,
+                    TrangThaiDuyet:"-1",
+                    MuiTiemThu: MuiTiemThu,// gia tri tu tao
+                    TuNgay:TuNgay,
+                    DenNgay:DenNgay,
+                    LoaiNhom: LoaiNhom,
+             
+
+                },
+                success: function (data) {
+                 
+                    if (data.code == 200) {
+                    
+                      
+                        $.each(data.chitiettiem, function (key, value) {
+                     
+                     
+                             Data_ChiTietTiem[0].push(value.dem);
+                    
+                          
+                        });
+           
+                    }
+                }
+            });
+            //////// chuaduyet
+             $.ajax({
+                url: 'ChiTietTiemThongKe/DanhSach',
+                type: 'GET',
+                async: false,
+                data: {
+                      IDVaccine: timtheoIDVaccine,
+                    IDSinhVien: null,
+                    IDKhoaHoc: timtheoIDKhoaHoc,
+                    IDKhoa: timtheoIDKhoa,
+                    IDTruong: timtheoIDTruong,
+                    TrieuChungSauTiem:TrieuChungSauTiem,
+                    TrangThaiDuyet:"0",
+                    MuiTiemThu: MuiTiemThu,// gia tri tu tao
+                    TuNgay:TuNgay,
+                    DenNgay:DenNgay,
+                    LoaiNhom: LoaiNhom,
+             
+
+                },
+                success: function (data) {
+                 
+                    if (data.code == 200) {
+           
+                      
+                        $.each(data.chitiettiem, function (key, value) {
+
+                             Data_ChiTietTiem[1].push(value.dem);
+                        
+                       
+                        });
+           
+                    }
+                }
+            });
+             //////// da duyet
+             $.ajax({
+                url: 'ChiTietTiemThongKe/DanhSach',
+                type: 'GET',
+                async: false,
+                data: {
+                      IDVaccine: timtheoIDVaccine,
+                    IDSinhVien: null,
+                    IDKhoaHoc: timtheoIDKhoaHoc,
+                    IDKhoa: timtheoIDKhoa,
+                    IDTruong: timtheoIDTruong,
+                    TrieuChungSauTiem:TrieuChungSauTiem,
+                    TrangThaiDuyet:"1",
+                    MuiTiemThu: MuiTiemThu,// gia tri tu tao
+                    TuNgay:TuNgay,
+                    DenNgay:DenNgay,
+                    LoaiNhom: LoaiNhom,
+             
+
+                },
+                success: function (data) {
+                 
+                    if (data.code == 200) {
+                    
+                        $.each(data.chitiettiem, function (key, value) {
+                           
+                             Data_ChiTietTiem[2].push(value.dem);
+           
+                        });
+           
+                    }
+                }
+            });
+           //////// mui 1
+             $.ajax({
+                url: 'ChiTietTiemThongKe/DanhSach',
+                type: 'GET',
+                async: false,
+                data: {
+                         IDVaccine: timtheoIDVaccine,
+                    IDSinhVien: null,
+                    IDKhoaHoc: timtheoIDKhoaHoc,
+                    IDKhoa: timtheoIDKhoa,
+                    IDTruong: timtheoIDTruong,
+                    TrieuChungSauTiem:TrieuChungSauTiem,
+                    TrangThaiDuyet:null,
+                    MuiTiemThu: 1,// gia tri tu tao
+                    TuNgay:TuNgay,
+                    DenNgay:DenNgay,
+                    LoaiNhom: LoaiNhom,
+             
+
+                },
+                success: function (data) {
+                 
+                    if (data.code == 200) {
+                    
+                        $.each(data.chitiettiem, function (key, value) {
+                           
+                             Data_ChiTietTiem[3].push(value.dem);
+           
+                        
+                        });
+           
+                    }
+                }
+            });
+            //////// mui 2
+             $.ajax({
+                url: 'ChiTietTiemThongKe/DanhSach',
+                type: 'GET',
+                async: false,
+                data: {
+                      IDVaccine: timtheoIDVaccine,
+                    IDSinhVien: null,
+                    IDKhoaHoc: timtheoIDKhoaHoc,
+                    IDKhoa: timtheoIDKhoa,
+                    IDTruong: timtheoIDTruong,
+                    TrieuChungSauTiem:TrieuChungSauTiem,
+                    TrangThaiDuyet:null,
+                    MuiTiemThu: 2,// gia tri tu tao
+                    TuNgay:TuNgay,
+                    DenNgay:DenNgay,
+                    LoaiNhom: LoaiNhom,
+             
+
+                },
+                success: function (data) {
+                 
+                    if (data.code == 200) {
+                    
+                        $.each(data.chitiettiem, function (key, value) {
+                           
+                             Data_ChiTietTiem[4].push(value.dem);
+           
+                   
+                        });
+           
+                    }
+                }
+            });
+             //////// mui 2
+             $.ajax({
+                url: 'ChiTietTiemThongKe/DanhSach',
+                type: 'GET',
+                async: false,
+                data: {
+                      IDVaccine: timtheoIDVaccine,
+                    IDSinhVien: null,
+                    IDKhoaHoc: timtheoIDKhoaHoc,
+                    IDKhoa: timtheoIDKhoa,
+                    IDTruong: timtheoIDTruong,
+                    TrieuChungSauTiem:TrieuChungSauTiem,
+                    TrangThaiDuyet:null,
+                    MuiTiemThu: 3,// gia tri tu tao
+                    TuNgay:TuNgay,
+                    DenNgay:DenNgay,
+                    LoaiNhom: LoaiNhom,
+             
+
+                },
+                success: function (data) {
+                 
+                    if (data.code == 200) {
+                    
+                        $.each(data.chitiettiem, function (key, value) {
+                           
+                             Data_ChiTietTiem[5].push(value.dem);
+           
+                       
+                        });
+           
+                    }
+                }
+            });
+
+               var dataaa = {
+                    labels: Labels,
+               
+                    datasets: [
+                     //////   
+                     {
+                        label: 'Tổng số chi tiết tiêm',
+                        data:Data_Tong_ChiTietTiem,
+                        backgroundColor: [
+                         
+                            'rgba(0, 0, 255, 0.3)'
+                        ],
+                        borderColor: [
+                      
+                            'rgba(0, 0, 255, 1)',
+                           
+                        ],
+                        borderWidth: 1,
+                        //stack: 'Stack 0',
+                    },
+                     //////    
+                     {
+                        label: 'Đã huỷ',
+                        data: Data_ChiTietTiem[0],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.3)',
+                     
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                         
+                        ],
+                        borderWidth: 1,
+                        //stack: 'Stack 1',
+                    },
+                     ////////
+                    {
+                        label: 'Chưa duyệt',
+                        data:Data_ChiTietTiem[1],
+                        backgroundColor: [
+                         
+                            'rgba(255,255,0,0.3)',
+                      
+                        ],
+                        borderColor: [
+                        
+                            'rgba(255,255,0,1)',
+                         
+                        ],
+                        borderWidth: 1,
+                        //stack: 'Stack 1',
+                    },
+                     ////////
+                    {
+                        label: 'Đã duyệt',
+                        data: Data_ChiTietTiem[2],
+                             backgroundColor: [
+                       
+                            'rgba(0,255,0,0.3)'
+                        ],
+                        borderColor: [
+                        
+                            'rgba(0,255,0,1)'
+                        ],
+                        borderWidth: 1,
+                        //stack: 'Stack 1',
+                    },
+                     ////////
+                    {
+                        label: 'Tiêm mũi 1 ',
+                        data: Data_ChiTietTiem[3],
+                           backgroundColor: [
+                       
+                            'rgba(166, 166, 166, 0.3)'
+                        ],
+                        borderColor: [
+                        
+                            'rgba(166, 166, 166, 1)'
+                        ],
+                        borderWidth: 1,
+                        //stack: 'Stack 2',
+                    },
+                     ////////
+                    {
+                        label: 'Tiêm mũi 2 ',
+                        data: Data_ChiTietTiem[4],
+                        backgroundColor: [
+                       
+                            'rgba(170, 128, 255,0.3)'
+                        ],
+                        borderColor: [
+                        
+                            'rgba(170, 128, 255,1)'
+                        ],
+                        borderWidth: 1,
+                        //stack: 'Stack 2',
+                    },////////
+                    {
+                        label: 'Tiêm mũi tăng cường ',
+                        data: Data_ChiTietTiem[5],
+                        backgroundColor: [
+                       
+                            'rgba(0, 204, 255,0.3)'
+                        ],
+                        borderColor: [
+                        
+                            'rgba(0, 204, 255,1)'
+                        ],
+                        borderWidth: 1,
+                        //stack: 'Stack 2',
+                    },
+                
+                 ]
+               
+               
+            };
+
+            ///////////////////////////
+                    //myChart.config=configs;
+                     let LoaiBieuDo = $('#LoaiBieuDo').val().trim();
+                     myChart.config.data=dataaa;
+
+                     myChart.config.type=LoaiBieuDo;
+
+  
+         myChart.update();
+
+};
+
+    function TaoBieuDoMau(){
+
+
+      
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+     //alert(ctx);    
+              //$("#myChart").empty();
+    var config = 
+        {
+              
+              
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    },
+                    responsive: true,
+                    plugins: {
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Biểu đồ thống kê chi tiết tiêm'
+                      }
+                    },
+
+                    //scales: {
+                    //      x: {
+                    //        stacked: true,
+                    //      },
+                    //      y: {
+                    //        stacked: true,
+                    //      }
+                    //}
+                }
+            };
+            
+        //myChart.destroy();
+        myChart = new Chart(ctx, config);
+
+
+
+    myChart.update();
+
+     };
+
+    
+     function LoaiBieuDoChanged(obj) {
+            var message = document.getElementById('LoaiBieuDo');
+            var value = obj.value;
+
+                myChart.config.type=value;
+
+  
+              myChart.update();
+           };
+    </script>
+}

@@ -1,0 +1,219 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.BAL\\QuanLyCovidDHH.BLL.csproj": {}
+  },
+  "projects": {
+    "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.BAL\\QuanLyCovidDHH.BLL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.BAL\\QuanLyCovidDHH.BLL.csproj",
+        "projectName": "QuanLyCovidDHH.BLL",
+        "projectPath": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.BAL\\QuanLyCovidDHH.BLL.csproj",
+        "packagesPath": "C:\\Users\\CAO NGHIN\\.nuget\\packages\\",
+        "outputPath": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.BAL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\CAO NGHIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.DAL\\QuanLyCovidDHH.DAL.csproj": {
+                "projectPath": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.DAL\\QuanLyCovidDHH.DAL.csproj"
+              },
+              "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.Domain\\QuanLyCovidDHH.Domain.csproj": {
+                "projectPath": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.Domain\\QuanLyCovidDHH.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.15.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.15.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.104\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.DAL\\QuanLyCovidDHH.DAL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.DAL\\QuanLyCovidDHH.DAL.csproj",
+        "projectName": "QuanLyCovidDHH.DAL",
+        "projectPath": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.DAL\\QuanLyCovidDHH.DAL.csproj",
+        "packagesPath": "C:\\Users\\CAO NGHIN\\.nuget\\packages\\",
+        "outputPath": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.DAL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\CAO NGHIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.Domain\\QuanLyCovidDHH.Domain.csproj": {
+                "projectPath": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.Domain\\QuanLyCovidDHH.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.123, )"
+            },
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.2.2, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.104\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.Domain\\QuanLyCovidDHH.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.Domain\\QuanLyCovidDHH.Domain.csproj",
+        "projectName": "QuanLyCovidDHH.Domain",
+        "projectPath": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.Domain\\QuanLyCovidDHH.Domain.csproj",
+        "packagesPath": "C:\\Users\\CAO NGHIN\\.nuget\\packages\\",
+        "outputPath": "D:\\KhoaLuanTotNghiep\\QuanLyCovidDHH\\quanlycoviddhh\\QuanLyCovidDHH.API\\QuanLyCovidDHH.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\CAO NGHIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.12, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.104\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

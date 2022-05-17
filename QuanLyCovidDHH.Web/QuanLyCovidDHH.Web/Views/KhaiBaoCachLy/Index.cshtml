@@ -1,0 +1,1309 @@
+﻿@model QuanLyCovidDHH.Web.Models.KhaiBaoCachLy.TaoMoi
+
+@{
+    ViewData["Title"] = "KhaiBaoCachLy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="table--database">
+    <div class="container">
+        <div class="section--title">
+            <h3>DANH SÁCH THÔNG TIN KHAI BÁO CÁCH LY</h3>
+            <hr />
+            <form>
+                <div class="row">
+                    <div class="col">
+                        <label>Trường</label>
+                        <select class="form-control" id="timkiem-timtheoIDTruong" onclick="TruongChanged(this)"> 
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Khoa</label>
+                        <select class="form-control" id="timkiem-timtheoIDKhoa" onclick="KhoaChanged(this)"> 
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                         <div class="col">
+                        <label>Khoá học</label>
+                        <select class="form-control" id="timkiem-timtheoIDKhoaHoc"onclick="KhoaHocChanged(this)"> 
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Sinh viên</label>
+                        <select class="form-control" id="timkiem-timtheoIDSinhVien">
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                  
+                </div>
+                <div class="row">
+                         <div class="col">
+                  
+                                <label class="control-label">Đối tượng cách ly</label>
+                                <select class="form-control" id="timkiem-timtheoDoiTuongCachLy">
+                                    <option class="form-control" value="">- Tất cả -</option>
+                                    <option class="form-control" value="F1">F1</option>
+                                    <option class="form-control" value="F2">F2</option>
+                               
+                                </select>
+                            </div>
+
+        
+
+                         <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Ngày </label>
+                                    <input id="timkiem-timtheoNgay" name="timkiem-timtheoNgay" class="form-control" type="date" />
+                                </div>
+                            </div>
+                    <div class="col">
+
+
+                        <label>Trạng thái duyệt</label>
+                        <select class="form-control" id="timkiem-timtheoTrangThaiDuyet">
+                            <option class="form-control" value="">- Tất cả -</option>
+                            <option class="form-control" value="1">Đã duyệt</option>
+                            <option class="form-control" value="0">Chưa duyệt</option>
+                            <option class="form-control" value="-1">Đã huỷ</option>
+                        </select>
+                    </div>
+           @*         <div class="col">
+                        <label>Tìm theo khoá học hoặc năm tuyển sinh</label>
+                        <input type="text" class="form-control" id="timkiem-timtheotukhoa">
+                    </div>*@
+                  
+                </div>
+                <div class="row d-flex justify-content-between" style="padding: 15px">
+                    <a class="btn btn-success" id="btnAdd" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fa fa-plus"></i>
+                        <span>Thêm mới</span>
+                    </a>
+                
+                    <a class="btn btn-primary" id="btnSearch">
+                        <i class="fa fa-search"></i>
+                        <span>Tìm kiếm</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+      
+        <div class="box-bordertop"> 
+        
+       
+            <table class="table table-hover table-bordered" id="table-full">
+                
+            </table>
+                  
+                  <button class="btn btn-success" onclick="exportTableToExcel('table-full', 'khaibaocachly-data')">>Xuất File Excel</button>
+                 
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalKhaiBaoCachLy" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-center m-2" id="modal-title">Khai báo xét nghiệm</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form enctype="multipart/form-data" id="formKhaiBaoCachLy" method="post">
+                    <div class="modal-body">
+                        <input type="text" hidden id="hiddenvalue" value="" /> <!--Phân biệt nút Lưu lại trong Tạo mới và Chỉnh sửa-->
+                        <div class="errorTxt form-group" id="errorTxt"></div> <!--Khu vực validate-->
+           
+                     <div id="IDTruongAll" class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên trường</label>
+                                   
+                                     <select class="form-control" id="IDTruong" onclick="Truong2Changed(this)">
+                                       
+                                    </select>
+
+                                </div>
+                            </div>
+                           
+                        </div>
+                     <div  id="IDKhoaAll" class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên Khoa  </label>
+                                   
+                                     <select class="form-control" id="IDKhoa" onclick="Khoa2Changed(this)" >
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                        <div  id="IDKhoaHocAll" class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Khoá học</label>
+                                          
+                                     <select class="form-control" id="IDKhoaHoc" onclick="KhoaHoc2Changed(this)">
+                                          
+                                     </select>
+                                </div>
+                            </div>
+                        </div>
+
+                          <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Sinh viên</label>
+                                   
+                                     <select class="form-control" id="IDSinhVien">
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                         <div class="row">
+                            <div class="col">
+                  
+                                <label class="control-label">Đối tượng cách ly</label>
+                                <select class="form-control" id="doiTuongCachLy">
+       
+                                    <option class="form-control" value="F1">F1</option>
+                                    <option class="form-control" value="F2">F2</option>
+                              
+                                </select>
+                            </div>
+                        </div>
+                       <div class="row">
+                            <div class="col">
+                            
+                               <label class="control-label">Ngày bắt đầu cách ly</label>
+                                  <input id="ngayBatDauCachLy" name="ngayBatDauCachLy" class="form-control" type="date" />
+                            </div>
+                        </div>
+                       <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Ngày kết thúc</label>
+                                    <input id="ngayKetThucCachLy" name="ngayKetThucCachLy" class="form-control" type="date" />
+                                </div>
+                            </div>
+                        </div>
+         
+
+                        <div class="row">
+                            <div class="col">
+                           
+
+                                    <div class="form-group">
+                                    <label class="control-label">Hình ảnh xét nghiệm</label>
+                                    <div class="file-info" id="file-info-1">
+                                        <div class="file-icon"><i class="fa fa-file-word fa-2x"></i></div>
+                                        <div class="file-content">
+                                            <a class="quyetDinhCachLy" id="quyetDinhCachLy"></a>
+                                        </div>
+                                    </div>
+                                    <div class="custom-file" id="custom-file-1">
+                                        <label for="fileQuyetDinhCachLy">Đính kèm</label>
+                                        <input type="file" id="fileQuyetDinhCachLy" name="fileQuyetDinhCachLy" />
+                                    </div>
+                                </div>
+
+                            </div>
+                          
+                        </div>
+                             
+                        
+                     
+
+                        <div class="form-group">
+                            <div id="trangThaiDuyet" name="trangThaiDuyet">
+                                <label class="control-label">Trạng thái duyệt: </label> <br>
+                                <input type="radio" id="trangThaiDuyet" name="trangThaiDuyet" value="1" />Đã duyệt
+                                <input type="radio" id="trangThaiDuyet" name="trangThaiDuyet" value="0" />Chưa duyệt
+                                <input type="radio" id="trangThaiDuyet" name="trangThaiDuyet" value="-1" />Đã huỷ
+                            </div>
+                        </div>
+                         <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Lý do</label>
+                                    <input id="lyDo" name="lyDo" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Ghi chú</label>
+                                    <input id="ghiChu" name="ghiChu" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                           
+        
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="btnSubmit">Lưu lại</button>
+                            <button type="button" class="btn btn-secondary" id="btnClose" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notification">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="notiMessenger"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnConfirm">Xác nhận</button>
+                <button type="button" class="btn btn-danger" id="btnClose" data-dismiss="modal">Đóng lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<form enctype="multipart/form-data">
+    <input id="upload" type=file  name="files[]" onchange="handleFileSelect()">
+
+</form>
+     <button id="nhapdulieu" onclick=" InpuExcel()">nhập dữ liệu</button>
+    <textarea class="form-control" rows=35 cols=120 id="xlx_json"></textarea>
+ 
+ 
+
+@section scripts{
+
+      
+
+    <script>
+
+
+        $(document).ready(function () {
+              
+            Load_Danhsach_KhaiBaoCachLy();
+            Load_DSTruong_Combobox();
+            Load_DSKhoa_Combobox();
+            
+            Load_DSSinhVien_Combobox();
+            ValidateForm();
+          
+            //  var today = new Date();
+            //let dd2 = String(today.getDate()).padStart(2, '0');
+            //let mm2 = String(today.getMonth() + 1).padStart(2, '0'); January is 0!
+            //let yyyy2 = today.getFullYear();
+            //$("#timkiem-timtheoNgay").val(yyyy2+"-"+mm2+"-"+dd2);
+
+
+        });
+        function ResetForm() {
+
+                    $('#doiTuongCachLy').val('');
+
+                    $('#ngayBatDauCachLy').val(new Date());
+                    $('#ngayKetThucCachLy').val(new Date());
+        
+            
+           
+                    $("#quyetDinhCachLy").val('');
+       
+                    $('input:radio[name=trangThaiDuyet]').each(function () { $(this).prop('checked', false); });
+                
+                    $('#lyDo').val('');  
+                    $('#ghiChu').val('');      
+          
+
+        };
+         function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+        function ValidateForm() {
+            $("form[id='formKhaiBaoCachLy']").validate({
+                rules: {
+                    maKhoa: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                    tenKhoa: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                  
+                   
+                },
+                messages: {
+                    maKhoa: {
+                        required: "Vui lòng nhập Mã khoa",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 kí tự"
+                    },
+                    tenKhoa: {
+                        required: "Vui lòng nhập Tên khoa",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 ký tự"
+                    },
+                
+                    
+                },
+                errorElement: 'div',
+                errorLabelContainer: '.errorTxt',
+                submitHandler: function (form) {
+                }
+            });
+        }
+        $('#btnAdd').click(function () {
+            ResetForm();
+             $('#IDTruongAll').show();
+             $('#IDKhoaAll').show();
+             $('#IDKhoaHocAll').show();
+             $("#IDSinhVien").prop('disabled', false);
+      
+            $('#hiddenvalue').val(''); // Hidden id
+            $('#modalKhaiBaoCachLy').modal();
+        });
+        function Load_Danhsach_KhaiBaoCachLy() {
+            TaoBang();
+
+            $.ajax({
+                url: 'KhaiBaoCachLy/DanhSach',
+                type: 'GET',
+                data: {
+
+                    IDSinhVien:null,
+                    IDKhoaHoc: null,
+                    IDKhoa: null,
+                    IDTruong: null,
+                    DoiTuongCachLy:null,
+      
+                    Ngay:null,
+                    TrangThaiDuyet:null
+             
+
+                },
+                success: function (data) {
+                            
+                    if (data.code == 200) {
+                        let stt = 0;
+                 
+                        $.each(data.khaibaocachly, function (key, value) {
+
+                             stt = stt + 1;
+                       
+                             let tr = '<tr id="' + value.idKhaiBaoCachLy+ '">';
+                            tr += '<td>' + stt + '</td>';  
+                            tr += '<td>' + value.maSinhVien + '</td>';
+                            tr += '<td>' + value.hoTen + '</td>';
+                            tr += '<td>' + value.doiTuongCachLy + '</td>';
+                   
+                               //Convert Datetime to String
+                            let ngayBatDauCachLy = new Date(value.ngayBatDauCachLy);
+                         
+                            let dd1 = String(ngayBatDauCachLy.getDate()).padStart(2, '0');
+                            let mm1 = String(ngayBatDauCachLy.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy1 = ngayBatDauCachLy.getFullYear();
+                            ngayBatDauCachLy =  dd1 + '/' + mm1 + '/' + yyyy1;
+                            tr += '<td>' + ngayBatDauCachLy + '</td>';
+               
+                             //Convert Datetime to String
+                            let ngayKetThucCachLy = new Date(value.ngayKetThucCachLy);
+                         
+                            let dd2 = String(ngayKetThucCachLy.getDate()).padStart(2, '0');
+                            let mm2 = String(ngayKetThucCachLy.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy2 = ngayKetThucCachLy.getFullYear();
+                            ngayKetThucCachLy =  dd2 + '/' + mm2 + '/' + yyyy2;
+                            tr += '<td>' + ngayKetThucCachLy + '</td>';
+                           
+                          
+                            if (value.quyetDinhCachLy  == null || value.quyetDinhCachLy  == '' ) {
+                                    tr += '<td>Không có</td>';
+                            }
+                            else{
+                               tr += '<td>' + value.quyetDinhCachLy + '</td>';
+                            }
+                            
+                            ////////////
+                            if(value.trangThaiDuyet=='1'){
+                                 tr += '<td>Đã duyệt</td>';
+                            }
+                            else{
+                                  if(value.trangThaiDuyet=='0'){
+                                         tr += '<td>Chưa duyệt</td>';
+                                    }
+                                    else{                                            
+                                         tr += '<td>Đã huỷ</td>';                                        
+                                     }
+                            }
+
+                        
+                            //////////
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+                        });
+                   Load_PhanTrang();
+                    }
+                }
+            });
+        };
+
+        $('#btnSearch').click(function () {
+                //Xoa_PhanTrang();      
+            let select1 = document.getElementById('timkiem-timtheoIDTruong');
+            let option1 = select1.options[select1.selectedIndex];
+            let idtruong = option1.value;
+
+            let select2 = document.getElementById('timkiem-timtheoIDKhoa');
+            let option2 = select2.options[select2.selectedIndex];
+            let idkhoa = option2.value;
+
+             let select3 = document.getElementById('timkiem-timtheoIDKhoaHoc');
+            let option3 = select3.options[select3.selectedIndex];
+            let idkhoahoc = option3.value;
+
+             let IDSinhVien = $('#timkiem-timtheoIDSinhVien').val().trim();
+             let DoiTuongCachLy = $('#timkiem-timtheoDoiTuongCachLy').val().trim();
+
+            let Ngay = $('#timkiem-timtheoNgay').val().trim();
+            let TrangThaiDuyet = $('#timkiem-timtheoTrangThaiDuyet').val().trim();
+            
+            
+
+            let tukhoa = $('#timkiem-timtheotukhoa').val();
+            //alert(idtruong+idkhoa+idkhoahoc);
+            $.ajax({
+                url: 'KhaiBaoCachLy/DanhSach',
+                type: 'GET',
+                data: {
+                    IDSinhVien:IDSinhVien,     
+                    IDKhoaHoc:idkhoahoc,
+                    IDKhoa: idkhoa,
+                    IDTruong: idtruong,
+                    DoiTuongCachLy:DoiTuongCachLy,
+                
+                    Ngay:Ngay,
+                    TrangThaiDuyet:TrangThaiDuyet
+              
+                },
+                success: function (data) {
+               if (data.code == 200) {
+                        let stt = 0;
+              
+                        $('#table-full').empty();
+                       
+                        TaoBang();
+                         
+                        $.each(data.khaibaocachly, function (key, value) {
+                               stt = stt + 1;
+                       
+                             let tr = '<tr id="' + value.idKhaiBaoCachLy+ '">';
+                            tr += '<td>' + stt + '</td>';  
+                            tr += '<td>' + value.maSinhVien + '</td>';
+                            tr += '<td>' + value.hoTen + '</td>';
+                            tr += '<td>' + value.doiTuongCachLy + '</td>';
+                                                
+                            //Convert Datetime to String
+                            let ngayBatDauCachLy = new Date(value.ngayBatDauCachLy);
+                         
+                            let dd1 = String(ngayBatDauCachLy.getDate()).padStart(2, '0');
+                            let mm1 = String(ngayBatDauCachLy.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy1 = ngayBatDauCachLy.getFullYear();
+                            ngayBatDauCachLy =  dd1 + '/' + mm1 + '/' + yyyy1;
+                            tr += '<td>' + ngayBatDauCachLy + '</td>';
+               
+                             //Convert Datetime to String
+                            let ngayKetThucCachLy = new Date(value.ngayKetThucCachLy);
+                         
+                            let dd2 = String(ngayKetThucCachLy.getDate()).padStart(2, '0');
+                            let mm2 = String(ngayKetThucCachLy.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy2 = ngayKetThucCachLy.getFullYear();
+                            ngayKetThucCachLy =  dd2 + '/' + mm2 + '/' + yyyy2;
+                            tr += '<td>' + ngayKetThucCachLy + '</td>';
+                           
+                          
+                            if (value.quyetDinhCachLy  == null || value.quyetDinhCachLy  == '' ) {
+                                    tr += '<td>Không có</td>';
+                            }
+                            else{
+                               tr += '<td>' + value.quyetDinhCachLy + '</td>';
+                            }
+                            
+                            ////////////
+                            if(value.trangThaiDuyet=='1'){
+                                 tr += '<td>Đã duyệt</td>';
+                            }
+                            else{
+                                  if(value.trangThaiDuyet=='0'){
+                                         tr += '<td>Chưa duyệt</td>';
+                                    }
+                                    else{                                            
+                                         tr += '<td>Đã huỷ</td>';                                        
+                                     }
+                            }
+
+                         
+                            //////////
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+                        });
+                        destroy();
+                   //Load_PhanTrang();
+                       
+                    }
+                }
+            });
+        });
+
+       function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+
+         $('#btnSubmit').click(function () {
+            let hiddenvalue = $('#hiddenvalue').val();
+
+
+        
+
+
+            let IDSinhVien = $('#IDSinhVien').val().trim();
+            let doiTuongCachLy = $('#doiTuongCachLy').val().trim();
+            let ngayBatDauCachLy = $('#ngayBatDauCachLy').val().trim();
+            let ngayKetThucCachLy = $('#ngayKetThucCachLy').val().trim();
+
+
+            let fileQuyetDinhCachLy = $('#fileQuyetDinhCachLy')[0].files[0];
+   
+            let trangThaiDuyet = $('input[id="trangThaiDuyet"]:checked').val();
+            let lyDo = $('#lyDo').val().trim();
+            let ghiChu = $('#ghiChu').val().trim();
+
+
+            let formData1 = new FormData();
+
+            formData1.append('iDSinhVien', IDSinhVien);
+            formData1.append('doiTuongCachLy', doiTuongCachLy);
+            formData1.append('ngayBatDauCachLy', ngayBatDauCachLy);
+            formData1.append('ngayKetThucCachLy', ngayKetThucCachLy);
+
+             
+  
+            formData1.append('fileQuyetDinhCachLy', fileQuyetDinhCachLy);
+            formData1.append('trangThaiDuyet', trangThaiDuyet);
+
+            formData1.append('lyDo', lyDo);
+         
+            formData1.append('ghiChu', ghiChu);
+         
+
+            let formData2 = new FormData();
+            formData2 = formData1;
+            formData2.append('iDKhaiBaoCachLy', hiddenvalue);
+            formData2.append('quyetDinhCachLy', $("#quyetDinhCachLy").text());
+                
+            //formData2.append('trangThai', trangThai);
+           
+          
+
+            if ($("#formKhaiBaoCachLy").valid()) {
+                if (hiddenvalue.length == 0) {
+                    //Thêm mới
+                    $.ajax({
+                        url: '/KhaiBaoCachLy/TaoMoi',
+                        type: 'POST',
+                        data: formData1,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                console.log(formData1);
+                                ResetForm();
+                                $('#table-body').empty();
+                                        $('#btnSearch').click();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                                
+                         
+                           
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    });
+                }
+                else if (hiddenvalue.length != 0) {
+                    //Chỉnh sửa
+
+                    $.ajax({
+                        url: '/KhaiBaoCachLy/ChinhSua',
+                        type: 'PUT',
+                        data: formData2,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                $('#table-body').empty();
+                                  $('#btnSearch').click();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    })
+                }
+            }
+        });
+
+         $(document).on('click', "button[name='edit']", function () {
+            ResetForm();
+
+            //$('#trangThai').show();
+            let id = $(this).closest('tr').attr('id');
+            $('#hiddenvalue').val(id);
+                $('#IDTruongAll').hide();
+                $('#IDKhoaAll').hide();
+                $('#IDKhoaHocAll').hide();
+                $("#IDSinhVien").prop('disabled', true);
+                   
+             
+             
+            $.ajax({
+                url: '/KhaiBaoCachLy/LayTheoID',
+                type: 'GET',
+                data: { id: id },
+                success: function (data) {
+            
+                $("#IDSinhVien").val(data.khaibaocachly.idSinhVien).change();   
+                //let IDTruong = data.khaibaocachly.idTruong;
+             
+                //let IDKhoa=data.khaibaocachly.idKhoa;
+      
+
+                //  Load_Khoa_Combobox_ChinhSua(IDTruong,IDKhoa);
+                    // TAI DU LIEU KHOA COMBOBOX
+              
+                  
+                    $('#doiTuongCachLy').val(data.khaibaocachly.doiTuongCachLy).change(); 
+           
+
+                    //////////////////////////////////
+                     let ngayBatDauCachLy = new Date(data.khaibaocachly.ngayBatDauCachLy);
+                           
+                            let dd1 = String(ngayBatDauCachLy.getDate()).padStart(2, '0');
+                            let mm1 = String(ngayBatDauCachLy.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy1 = ngayBatDauCachLy.getFullYear();
+                      
+                    $('#ngayBatDauCachLy').val(yyyy1+"-"+mm1+"-"+dd1);
+
+                    //////////////////////////////////
+                     let ngayKetThucCachLy = new Date(data.khaibaocachly.ngayKetThucCachLy);
+                           
+                            let dd2 = String(ngayKetThucCachLy.getDate()).padStart(2, '0');
+                            let mm2 = String(ngayKetThucCachLy.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy2 = ngayKetThucCachLy.getFullYear();
+                      
+                    $('#ngayKetThucCachLy').val(yyyy2+"-"+mm2+"-"+dd2);
+             
+          
+
+                 
+                    $('#quyetDinhCachLy').text(data.khaibaocachly.quyetDinhCachLy);
+                    $("#quyetDinhCachLy").attr("href",  "\\files\\KhaiBaoCachLy\\" +data.khaibaocachly.quyetDinhCachLy);
+                              let $radios = $('input:radio[name=trangThaiDuyet]');
+                               $radios.filter('[value='+data.khaibaocachly.trangThaiDuyet+']').prop('checked', true);
+                    $('#lyDo').val(data.khaibaocachly.lyDo);  
+                    $('#ghiChu').val(data.khaibaocachly.ghiChu);               
+                 
+                    $('#modalKhaiBaoCachLy').modal();
+                }
+
+            });
+            $.ajax({
+                url: '/FileUpload/LayTheoDoiTuongID',
+                type: 'get',
+                data: { doiTuongID: id },
+                success: function (data) {
+                    for (let i = 0; i < data.files.length; i++) {
+                        if (data.files[i].sttTep === 1) {
+                            $('#quyetDinhCachLy').attr('href', data.files[i].noiLuuTru);
+                        }
+                        //if (data.files[i].sttTep === 2) {
+                        //    $('#file-name-2').attr('href', data.files[i].noiLuuTru);
+                        //}
+                    }
+                }
+            });
+         });
+        $(document).on('click', "button[name='delete']", function () {
+            let id = $(this).closest('tr').attr('id');
+            var noti = confirm("Bạn có muốn xóa không?");
+            if (noti == true) {
+                $.ajax({
+                    url: 'KhaiBaoCachLy/XoaBo',
+                    type: 'DELETE',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            $('#table-body').empty();
+                            $('#btnSearch').click();
+                            ThongBao(data.msg);
+                        }
+                        else ThongBao(data.msg);
+                    }
+                })
+            } else {
+                alert("You pressed Cancel!");
+            }
+        });
+ 
+        function Load_DSTruong_Combobox() {
+            $.ajax({
+                url: 'Truong/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.truong, function (key, value) {
+                            let option = '<option  value="' + value.idTruong + '" class="form-control">' +  value.tenTruong+ '</option>';
+                            $('#timkiem-timtheoIDTruong').append(option);
+                            $('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+        };
+             function Load_DSKhoa_Combobox() {
+            $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+                            $('#IDKhoa').append(option);
+                        });
+                    }
+                }
+            });
+        };
+   
+           function Load_DSSinhVien_Combobox() {
+            $.ajax({
+                url: 'SinhVien/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.sinhvien, function (key, value) {
+                            let option = '<option  value="' + value.idSinhVien + '" class="form-control">' +  value.hoTen+ '</option>';
+ 
+                            $('#IDSinhVien').append(option);
+                        });
+                    }
+                }
+            });
+        };
+
+        function TruongChanged(obj) {
+            var message = document.getElementById('timkiem-timtheoIDTruong');
+            var value = obj.value;
+            $("#timkiem-timtheoIDKhoa").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+                    IDTruong:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+                         
+                            //$('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+            
+        };
+        
+        function KhoaChanged(obj) {
+            var message = document.getElementById('timkiem-timtheoIDKhoa');
+            var value = obj.value;
+            $("#timkiem-timtheoIDKhoaHoc").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDKhoaHoc').append(option);
+
+              if(value!=''){                 
+             //alert("You selected:"+value);
+                  $.ajax({
+                    url: 'KhoaHoc/DanhSach',
+                    type: 'GET',
+                    data: {
+                        IDKhoa:value
+             
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+            
+                            $.each(data.khoahoc, function (key, value) {
+                                let option = '<option  value="' + value.idKhoaHoc + '" class="form-control">' +  value.khoaHoc+ '</option>';
+                                $('#timkiem-timtheoIDKhoaHoc').append(option);
+                         
+                                //$('#IDTruong').append(option);
+                            });
+                        }
+                    }
+                });
+            }
+            
+        };
+              function KhoaHocChanged(obj) {
+                     var message = document.getElementById('timkiem-timtheoIDKhoaHoc');
+            var value = obj.value;
+            $("#timkiem-timtheoIDSinhVien").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDSinhVien').append(option);
+
+              if(value!=''){    
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'SinhVien/DanhSach',
+                type: 'GET',
+                data: {
+                    IDKhoaHoc:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.sinhvien, function (key, value) {
+                            let option = '<option  value="' + value.idSinhVien + '" class="form-control">' +  value.hoTen+ '</option>';
+                                   $('#timkiem-timtheoIDSinhVien').append(option);
+                         
+             
+                        });
+                    }
+                }
+            });
+            }
+            
+        };
+        function Truong2Changed(obj) {
+            var message = document.getElementById('IDTruong');
+            var value = obj.value;
+            $("#IDKhoa").empty();
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+                    IDTruong:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#IDKhoa').append(option);
+                         
+                            //$('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+            
+        };
+        function Khoa2Changed(obj) {
+            var message = document.getElementById('IDKhoa');
+            var value = obj.value;
+            $("#IDKhoaHoc").empty();
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'KhoaHoc/DanhSach',
+                type: 'GET',
+                data: {
+                    IDKhoa:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoahoc, function (key, value) {
+                            let option = '<option  value="' + value.idKhoaHoc + '" class="form-control">' +  value.khoaHoc+ '</option>';
+                            $('#IDKhoaHoc').append(option);
+                         
+             
+                        });
+                    }
+                }
+            });
+            
+        };
+          function KhoaHoc2Changed(obj) {
+            var message = document.getElementById('IDKhoaHoc');
+            var value = obj.value;
+            $("#IDSinhVien").empty();
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'SinhVien/DanhSach',
+                type: 'GET',
+                data: {
+                    IDKhoaHoc:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.sinhvien, function (key, value) {
+                            let option = '<option  value="' + value.idSinhVien + '" class="form-control">' +  value.hoTen+ '</option>';
+                            $('#IDSinhVien').append(option);
+                         
+             
+                        });
+                    }
+                }
+            });
+            
+        };
+        function Load_Khoa_Combobox_ChinhSua(valu, selec) {
+                  
+            $("#IDKhoa").empty();
+                   $.ajax({
+                        url: 'Khoa/DanhSach',
+                        type: 'GET',
+                        data: {
+                            IDTruong:valu
+             
+                        },
+                        success: function (data) {
+       
+                            if (data.code == 200) {
+            
+                                $.each(data.khoa, function (key, value) {
+                                    let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                                    $('#IDKhoa').append(option);
+                                  
+                         
+                                 
+                                });
+                                $("#IDKhoa").val(selec).change(); 
+                            }
+                        }
+                    });
+                    
+                
+        };
+         function Load_PhanTrang() {
+    
+        
+         $('#table-full').dataTable( 
+ 
+             {
+              "language": {
+              "sProcessing":   "Đang xử lý...",
+              "sLengthMenu":   "Xem _MENU_ mục",
+              "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
+              "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+              "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
+              "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+              "sInfoPostFix":  "",
+              "sSearch":       "Tìm:",
+              "sUrl":          "",
+              "oPaginate": {
+                  "sFirst":    "Đầu",
+                  "sPrevious": "Trước",
+                  "sNext":     "Tiếp",
+                  "sLast":     "Cuối"
+                  }
+              },
+              "processing": true, // tiền xử lý trước
+              "aLengthMenu": [[ 10, 20, 50,100,1000,999999], [ 10, 20, 50,100,1000,999999]], // danh sách số trang trên 1 lần hiển thị bảng
+              "order": [[ 1, 'desc' ]] //sắp xếp giảm dần theo cột thứ 1
+             
+          } );
+        };
+
+
+        function destroy() {
+            //   $('#table-full').DataTable( {
+             
+            //} );
+            //         $('#table-full').DataTable( {
+            //    paging: false
+            //} );
+ 
+            $('#table-full').DataTable( {
+                  "bDestroy": true,
+                   
+              "language": {
+              "sProcessing":   "Đang xử lý...",
+              "sLengthMenu":   "Xem _MENU_ mục",
+              "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
+              "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+              "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
+              "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+              "sInfoPostFix":  "",
+              "sSearch":       "Tìm:",
+              "sUrl":          "",
+              "oPaginate": {
+                  "sFirst":    "Đầu",
+                  "sPrevious": "Trước",
+                  "sNext":     "Tiếp",
+                  "sLast":     "Cuối"
+                  }
+              },
+                                "aLengthMenu": [[ 10, 20, 50,100,1000,999999], [ 10, 20, 50,100,1000,999999]], 
+                //searching: false
+            } );
+             }
+        function TaoBang() {
+
+                
+                
+                
+
+            let str = '<thead>';
+            str += '<tr>';
+            str += '<th style="width:10%">STT</th>';
+            str += '<th style="width:15%">Mã sinh viên</th>';
+            str += '<th style="width:15%">Họ Tên</th>';
+            str += '<th style="width:10%">Đối tượng cách ly</th>';
+            str += '<th style="width:10%">Ngày bắt đầu</th> ';
+            str += '<th style="width:10%">Ngày kết thúc</th> ';
+            str += '<th style="width:10%">Đính kèm</th>';
+            str += '<th style="width:10%">Trạng thái</th>';
+
+            str += '<th style="width:10%">Chức năng</th>';
+            str += '</thead>';
+            str += '<tbody id="table-body">';
+            str += '</tbody>';                              
+         $('#table-full').append(str);                  
+        };
+         
+              
+ 
+     function exportTableToExcel(tableID, filename = ''){
+            var downloadLink;
+            var dataType = '	application/vnd.ms-excel';
+            var tableSelect = document.getElementById(tableID);
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+            // Specify file name
+            filename = filename?filename+'.xls':'excel_data.xls';
+    
+            // Create download link element
+            downloadLink = document.createElement("a");
+    
+            document.body.appendChild(downloadLink);
+    
+            if(navigator.msSaveOrOpenBlob){
+                var blob = new Blob(['\ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob( blob, filename);
+            }else{
+                // Create a link to the file
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+                // Setting the file name
+                downloadLink.download = filename;
+        
+                //triggering the function
+                downloadLink.click();
+            }
+    }
+      
+
+
+   var ExcelToJSON = function() {
+ 
+      this.parseExcel = function(file) {
+        var reader = new FileReader();
+ 
+        reader.onload = function(e) {
+          var data = e.target.result;
+          var workbook = XLS.read(data, {
+            type: 'binary'
+          });
+           var kq=0;
+       
+          workbook.SheetNames.forEach(function(sheetName) {
+            // Here is your object
+            var XL_row_object = XLS.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+            var json_object = JSON.stringify(XL_row_object);
+            //alert(json_object);
+          
+        
+       
+               
+              
+   
+            console.log(JSON.parse(json_object));
+            jQuery( '#xlx_json' ).val( json_object );
+            //InpuExcel();
+          })
+        };
+ 
+        reader.onerror = function(ex) {
+          console.log(ex);
+        };
+ 
+        reader.readAsBinaryString(file);
+      };
+  };
+ 
+  function handleFileSelect() {
+    
+ 
+    var files = $('#upload')[0].files;; // FileList object
+    var xl2json = new ExcelToJSON();
+    xl2json.parseExcel(files[0]);
+  }
+ 
+       //document.getElementById('nhapdulieu').addEventListener('click', handleFileSelect, false);
+
+
+      function InpuExcel() {
+
+         var json_object = $('#xlx_json').val();
+
+            var myObj = JSON.parse(json_object);
+                            
+            var dong=1;
+            var loi=0;
+            var dongloi='';
+            $.each(myObj, function (key, value) {
+
+
+                   
+   
+                 
+                     var formData3 = new FormData();
+                    formData3.append('TenVaccine',  value.TenSinhVien);
+                    formData3.append('MaSinhVien',  value.MaSinhVien);
+                    formData3.append('DiaChiTiem',  value.DiaChiTiem);
+                    formData3.append('TrieuChungSauTiem',  value.TrieuChungSauTiem);
+                    formData3.append('NgayGioTiem',  value.NgayGioTiem);
+                    formData3.append('MuiTiemThu',  value.MuiTiemThu);
+             
+                  
+                  
+                
+                     $.ajax({
+                            url: '/KhaiBaoCachLy/TaoMoi_Excel',
+                            type: 'POST',
+                            data: formData3,
+                            async: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (data) {
+                                dong=dong+1;
+                                if (data.code == 200) {
+                                    console.log(formData3);
+                                 
+                                                      
+                             
+                                
+                                        
+                                } else {
+                       
+                                    loi+=1;
+                                    dongloi+=  dong+";"
+                                }
+                      
+                                             
+                           }        
+                    
+                    });
+                   
+                  
+     
+                       
+
+                    
+
+           });
+             if(loi==0){
+                 ThongBao("Tất cả thành công");
+             }
+             else{
+                    ThongBao("Dòng lỗi: "+dongloi+" tổng số dòng lỗi:"+loi);
+             }
+                
+
+             $('#btnSearch').click();
+  }
+
+        $("#fileQuyetDinhCachLy").change(function () {
+            let inputfile = document.getElementById("fileQuyetDinhCachLy").files;
+            let file = inputfile[0];
+            $('#file-info-1').show();
+            $('#quyetDinhCachLy').text(file.name);
+            //$("#quyetDinhCachLy").attr("href",  "\\files\\KhaiBaoCachLy\\" +file.name);
+
+        });
+    </script>
+}

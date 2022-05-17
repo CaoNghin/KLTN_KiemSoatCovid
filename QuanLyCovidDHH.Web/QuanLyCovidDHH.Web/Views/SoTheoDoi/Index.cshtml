@@ -1,0 +1,1553 @@
+﻿@model QuanLyCovidDHH.Web.Models.SoTheoDoi.TaoMoi
+
+@{
+    ViewData["Title"] = "SoTheoDoi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="table--database">
+    <div class="container">
+        <div class="section--title">
+            <h3>DANH SÁCH THÔNG TIN SỔ THEO DÕI</h3>
+            <hr />
+            <form>
+                <div class="row">
+                    <div class="col">
+                        <label>Trường</label>
+                        <select class="form-control" id="timkiem-timtheoIDTruong" onclick="TruongChanged(this)"> 
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Khoa</label>
+                        <select class="form-control" id="timkiem-timtheoIDKhoa" onclick="KhoaChanged(this)"> 
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Khoá học</label>
+                        <select class="form-control" id="timkiem-timtheoIDKhoaHoc"onclick="KhoaHocChanged(this)"> 
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                 
+                  
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Sinh viên</label>
+                        <select class="form-control" id="timkiem-timtheoIDSinhVien" onclick="SinhVienChanged(this)">
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                      <div class="col">
+                        <label>Bệnh án</label>
+                        <select class="form-control" id="timkiem-timtheoIDBenhAn" >
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                     <div class="col">
+                        <div class="form-group">
+                            <label class="control-label">Ngày theo dõi </label>
+                            <input id="timkiem-timtheoNgayTheoDoi" name="timkiem-timtheoNgayTheoDoi" class="form-control" type="date" />
+                        </div>
+                    </div>
+                    
+        
+                 
+             
+                </div>
+                <div class="row d-flex justify-content-between" style="padding: 15px">
+                    <a class="btn btn-success" id="btnAdd" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fa fa-plus"></i>
+                        <span>Thêm mới</span>
+                    </a>
+                
+                    <a class="btn btn-primary" id="btnSearch">
+                        <i class="fa fa-search"></i>
+                        <span>Tìm kiếm</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+      
+        <div class="box-bordertop"> 
+        
+       
+            <table class="table table-hover table-bordered" id="table-full">
+               
+         
+            </table>
+                  
+                  <button class="btn btn-success" onclick="exportTableToExcel('table-full', 'sotheodoi-data')">>Xuất File Excel</button>
+                 
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalSoTheoDoi" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-center m-2" id="modal-title">Bênh án</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form enctype="multipart/form-data" id="formSoTheoDoi" method="post">
+                    <div class="modal-body">
+                        <input type="text" hidden id="hiddenvalue" value="" /> <!--Phân biệt nút Lưu lại trong Tạo mới và Chỉnh sửa-->
+                        <div class="errorTxt form-group" id="errorTxt"></div> <!--Khu vực validate-->
+                      
+                    <div id="IDTruongAll"class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên trường</label>
+                                   
+                                     <select class="form-control" id="IDTruong" onclick="Truong2Changed(this)">
+                                       
+                                    </select>
+
+                                </div>
+                            </div>
+                           
+                      </div>
+                     <div id="IDKhoaAll" class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên Khoa</label>
+                                   
+                                     <select class="form-control" id="IDKhoa" onclick="Khoa2Changed(this)" >
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                        <div id="IDKhoaHocAll" class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Khoá học</label>
+                                          
+                                     <select class="form-control" id="IDKhoaHoc" onclick="KhoaHoc2Changed(this)">
+                                          
+                                     </select>
+                                </div>
+                            </div>
+                        </div>
+                         
+                          <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Sinh viên</label>
+                                   
+                                     <select class="form-control" id="IDSinhVien" onclick="SinhVien2Changed(this)">
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                
+                           <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Bệnh án</label>
+                                   
+                                     <select class="form-control" id="IDBenhAn" >
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                          <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Ngày theo dõi </label>
+                                    <input id="ngayTheoDoi" name="ngayTheoDoi" class="form-control" type="date" />
+                                </div>
+                            </div>
+                        </div>
+                       <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Nồng độ SpO2 (%)</label>
+                                    <input id="nongDoSpo2" name="nongDoSpo2" class="form-control" type="number" />
+                                </div>
+                            </div>
+                        </div>
+                       <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Sốt</label>
+                                    <input id="sot" name="sot" class="form-control" type="number" step="0.1"/>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row">
+                            <div class="col">
+                             <div class="form-group">
+                                <div id="ho" name="ho">
+                                    <label>Ho </label> <br>
+                                    <input type="radio" id="ho" name="ho" value="True" />Có
+                                    <input type="radio" id="ho" name="ho" value="False" />Không
+                           
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                             <div class="form-group">
+                                <div id="khoTho" name="khoTho">
+                                    <label>Khó thở </label> <br>
+                                    <input type="radio" id="khoTho" name="khoTho" value="True" />Có
+                                    <input type="radio" id="khoTho" name="khoTho" value="False" />Không
+                           
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                             <div class="form-group">
+                                <div id="dauHong" name="dauHong">
+                                    <label>Đau họng </label> <br>
+                                    <input type="radio" id="dauHong" name="dauHong" value="True" />Có
+                                    <input type="radio" id="dauHong" name="dauHong" value="False" />Không
+                           
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                             <div class="form-group">
+                                <div id="matViGiac" name="matViGiac">
+                                    <label>Mất vị giác</label> <br>
+                                    <input type="radio" id="matViGiac" name="matViGiac" value="True" />Có
+                                    <input type="radio" id="matViGiac" name="matViGiac" value="False" />Không
+                           
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                             <div class="form-group">
+                                <div id="matKhuuGiac" name="matKhuuGiac">
+                                    <label>Mất khứu giác </label> <br>
+                                    <input type="radio" id="matKhuuGiac" name="matKhuuGiac" value="True" />Có
+                                    <input type="radio" id="matKhuuGiac" name="matKhuuGiac" value="False" />Không
+                           
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="btnSubmit">Lưu lại</button>
+                            <button type="button" class="btn btn-secondary" id="btnClose" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notification">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="notiMessenger"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnConfirm">Xác nhận</button>
+                <button type="button" class="btn btn-danger" id="btnClose" data-dismiss="modal">Đóng lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<form enctype="multipart/form-data">
+    <input id="upload" type=file  name="files[]" onchange="handleFileSelect()">
+
+</form>
+     <button id="nhapdulieu" onclick=" InpuExcel()">nhập dữ liệu</button>
+    <textarea class="form-control" rows=35 cols=120 id="xlx_json"></textarea>
+ 
+ 
+
+@section scripts{
+
+      
+
+    <script>
+
+
+        $(document).ready(function () {
+              
+            Load_Danhsach_SoTheoDoi();
+            Load_DSTruong_Combobox();
+            Load_DSKhoa_Combobox();
+            Load_DSVaccine_Combobox();
+            Load_DSSinhVien_Combobox();
+            Load_DSBenhAn_Combobox();
+            ValidateForm();
+            $('#trangThai').hide();
+            //$('#ngayBanHanh').datepicker();
+
+
+        });
+        function ResetForm() {
+       
+     
+
+
+             $('#ngayTheoDoi').val('');
+                   /////////////
+                    $('#nongDoSpo2').val('');
+                    $('#sot').val('');
+        
+             $('input:radio[name=trangThaiDieuTri]').each(function () { $(this).prop('checked', false); });
+              $('input:radio[name=trangThaiDuyet]').each(function () { $(this).prop('checked', false); });
+              $("#benhAnDinhKem").val('');
+                    $('#ngayKetThucDieuTri').val('');
+        
+                      ////////
+                    $('#lyDo').val('');  
+                    $('#ghiChu').val('');               
+          
+          
+
+        };
+         function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+        function ValidateForm() {
+            $("form[id='formSoTheoDoi']").validate({
+                rules: {
+                    maKhoa: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                    tenKhoa: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                  
+                   
+                },
+                messages: {
+                    maKhoa: {
+                        required: "Vui lòng nhập Mã khoa",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 kí tự"
+                    },
+                    tenKhoa: {
+                        required: "Vui lòng nhập Tên khoa",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 ký tự"
+                    },
+                
+                    
+                },
+                errorElement: 'div',
+                errorLabelContainer: '.errorTxt',
+                submitHandler: function (form) {
+                }
+            });
+        }
+        $('#btnAdd').click(function () {
+            ResetForm();
+            $('#trangThai').hide();
+      
+            $('#hiddenvalue').val(''); // Hidden id
+              $('#IDTruongAll').show();
+            $('#IDKhoaAll').show();
+            $('#IDKhoaHocAll').show();
+      
+            $("#IDSinhVien").prop('disabled', false);
+            $("#IDBenhAn").prop('disabled', false);
+            $('#modalSoTheoDoi').modal();
+        });
+        function Load_Danhsach_SoTheoDoi() {
+            TaoBang();
+
+            $.ajax({
+                url: 'SoTheoDoi/DanhSach',
+                type: 'GET',
+                data: {
+                    
+                    IDSinhVien:null,
+                    IDKhoaHoc: null,
+                    IDKhoa: null,
+                    IDTruong: null,
+                  
+                    IDBenhAn:null,
+                    NgayTheoDoi:null,
+
+             
+
+                },
+                success: function (data) {
+                            
+                    if (data.code == 200) {
+                        let stt = 0;
+                 
+                        $.each(data.sotheodoi, function (key, value) {
+              
+                             stt = stt + 1;
+                       
+                             let tr = '<tr id="' + value.idSoTheoDoi+ '">';
+                            tr += '<td>' + stt + '</td>';  
+                            tr += '<td>' + value.ghiChu + '</td>';  // MÃ BỆNH ÁN
+                            tr += '<td>' + value.hoTen + '</td>';
+
+                             let ngayTheoDoi = new Date(value.ngayTheoDoi);
+                            //let hh1 = String(ngayTheoDoi.getHours()).padStart(2, '0');
+                            //let m1 = String(ngayTheoDoi.getMinutes()).padStart(2, '0');
+                            let dd1 = String(ngayTheoDoi.getDate()).padStart(2, '0');
+                            let mm1 = String(ngayTheoDoi.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy1 = ngayTheoDoi.getFullYear();
+                            ngayTheoDoi =  dd1 + '/' + mm1 + '/' + yyyy1;
+                            tr += '<td>' + ngayTheoDoi + '</td>';
+                            
+                           /////////////////////////////////////////
+                     
+                            if(value.nongDoSpo2==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.nongDoSpo2=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                    
+                                }
+                            //////////
+                            if(value.sot==0){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                       tr += '<td>' + value.sot + '</td>';
+                                }
+                            //////////
+                            if(value.ho==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.ho=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                
+                                }
+                            //////////
+                            if(value.khoTho==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.khoTho=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                   
+                                }
+                            //////////
+                            if(value.dauHong==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.dauHong=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                  
+                                }
+                            //////////
+                            if(value.matViGiac==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.matViGiac=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                 
+                                }
+                            //////////
+                            if(value.matKhuuGiac==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.matKhuuGiac=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                     
+                                }
+                            //////////
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+                        });
+                   Load_PhanTrang();
+                    }
+                }
+            });
+        };
+
+        $('#btnSearch').click(function () {
+                //Xoa_PhanTrang();      
+            let select1 = document.getElementById('timkiem-timtheoIDTruong');
+            let option1 = select1.options[select1.selectedIndex];
+            let idtruong = option1.value;
+
+            let select2 = document.getElementById('timkiem-timtheoIDKhoa');
+            let option2 = select2.options[select2.selectedIndex];
+            let idkhoa = option2.value;
+
+             let select3 = document.getElementById('timkiem-timtheoIDKhoaHoc');
+            let option3 = select3.options[select3.selectedIndex];
+            let idkhoahoc = option3.value;
+
+             let IDSinhVien = $('#timkiem-timtheoIDSinhVien').val().trim();
+
+
+            let IDBenhAn = $('#timkiem-timtheoIDBenhAn').val().trim();
+            let NgayTheoDoi = $('#timkiem-timtheoNgayTheoDoi').val().trim();
+        
+            
+            $.ajax({
+                url: 'SoTheoDoi/DanhSach',
+                type: 'GET',
+                data: {
+               
+                    IDSinhVien:IDSinhVien,
+                    IDKhoaHoc:idkhoahoc,
+                    IDKhoa: idkhoa,
+                    IDTruong: idtruong,
+                    
+                    IDBenhAn:IDBenhAn,
+                    NgayTheoDoi:NgayTheoDoi
+                  
+                   
+              
+                },
+                success: function (data) {
+               if (data.code == 200) {
+                        let stt = 0;
+              
+                        
+                       $('#table-full').empty();
+                        TaoBang();
+                     
+                        $.each(data.sotheodoi, function (key, value) {
+                             stt = stt + 1;
+                       
+                             let tr = '<tr id="' + value.idSoTheoDoi+ '">';
+                            tr += '<td>' + stt + '</td>';  
+                            tr += '<td>' + value.ghiChu + '</td>';  // MÃ BỆNH ÁN
+                            tr += '<td>' + value.hoTen + '</td>';
+
+                             let ngayTheoDoi = new Date(value.ngayTheoDoi);
+                            //let hh1 = String(ngayTheoDoi.getHours()).padStart(2, '0');
+                            //let m1 = String(ngayTheoDoi.getMinutes()).padStart(2, '0');
+                            let dd1 = String(ngayTheoDoi.getDate()).padStart(2, '0');
+                            let mm1 = String(ngayTheoDoi.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy1 = ngayTheoDoi.getFullYear();
+                            ngayTheoDoi =  dd1 + '/' + mm1 + '/' + yyyy1;
+                            tr += '<td>' + ngayTheoDoi + '</td>';
+                            
+                           /////////////////////////////////////////
+                     
+                            if(value.nongDoSpo2==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.nongDoSpo2=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                    
+                                }
+                            //////////
+                            if(value.sot==0){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                       tr += '<td>' + value.sot + '</td>';
+                                }
+                            //////////
+                            if(value.ho==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.ho=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                
+                                }
+                            //////////
+                            if(value.khoTho==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.khoTho=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                   
+                                }
+                            //////////
+                            if(value.dauHong==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.dauHong=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                  
+                                }
+                            //////////
+                            if(value.matViGiac==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.matViGiac=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                 
+                                }
+                            //////////
+                            if(value.matKhuuGiac==undefined){
+                                    tr += '<td>Chưa xác định</td>';
+                            }
+                            else{                                            
+                                    if(value.matKhuuGiac=="False"){
+                                        tr += '<td>Không</td>';
+                                    }
+                                    else{                                            
+                                            tr += '<td>Có</td>';                                       
+                                        }                                     
+                                }
+                            //////////
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+                        });
+                        destroy();
+                   //Load_PhanTrang();
+                       
+                    }
+                }
+            });
+        });
+
+       function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+
+         $('#btnSubmit').click(function () {
+            let hiddenvalue = $('#hiddenvalue').val();
+
+
+        
+             alert("hi")
+          
+  
+            let IDBenhAn = $('#IDBenhAn').val().trim();
+                alert("hi1");
+            let ngayTheoDoi = $('#ngayTheoDoi').val().trim();
+                alert("hi2");
+            let nongDoSpo2 = $('#nongDoSpo2').val().trim();
+                alert("hi3");
+            let sot = $('#sot').val().trim();
+                alert("hi4");
+            let ho = $('input[id="ho"]:checked').val();
+            let khoTho = $('input[id="khoTho"]:checked').val();
+            let dauHong = $('input[id="dauHong"]:checked').val();
+            let matViGiac = $('input[id="matViGiac"]:checked').val();
+            let matKhuuGiac = $('input[id="matKhuuGiac"]:checked').val();
+  
+             alert("hi")
+          
+            let formData1 = new FormData();
+        
+            formData1.append('IDBenhAn', IDBenhAn);
+            formData1.append('ngayTheoDoi', ngayTheoDoi);
+            formData1.append('nongDoSpo2', nongDoSpo2);
+            formData1.append('sot', sot);
+            formData1.append('ho', ho);
+            formData1.append('khoTho', khoTho);
+            formData1.append('dauHong', dauHong);
+            formData1.append('matViGiac', matViGiac);
+            formData1.append('matKhuuGiac', matKhuuGiac);
+             
+  
+
+         
+
+            let formData2 = new FormData();
+            formData2 = formData1;
+            formData2.append('iDSoTheoDoi', hiddenvalue);
+
+                
+
+          
+
+            if ($("#formSoTheoDoi").valid()) {
+                if (hiddenvalue.length == 0) {
+                    //Thêm mới
+                    $.ajax({
+                        url: '/SoTheoDoi/TaoMoi',
+                        type: 'POST',
+                        data: formData1,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                console.log(formData1);
+                                ResetForm();
+                                $('#table-body').empty();
+                                $('#btnSearch').click();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                              
+                         
+                           
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    });
+                }
+                else if (hiddenvalue.length != 0) {
+                    //Chỉnh sửa
+
+                    $.ajax({
+                        url: '/SoTheoDoi/ChinhSua',
+                        type: 'PUT',
+                        data: formData2,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                $('#table-body').empty();
+                                  $('#btnSearch').click();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    })
+                }
+            }
+        });
+
+         $(document).on('click', "button[name='edit']", function () {
+            ResetForm();
+
+            //$('#trangThai').show();
+            let id = $(this).closest('tr').attr('id');
+            $('#hiddenvalue').val(id);
+                 
+
+                   
+             
+             
+            $.ajax({
+                url: '/SoTheoDoi/LayTheoID',
+                type: 'GET',
+                data: { id: id },
+                success: function (data) {
+              
+                    
+                $('#IDTruongAll').hide();
+                $('#IDKhoaAll').hide();
+                $('#IDKhoaHocAll').hide();
+                $("#IDSinhVien").prop('disabled', true);
+                $("#IDBenhAn").prop('disabled', true);
+
+                //let IDTruong = data.sotheodoi.idTruong;
+             
+                //let IDKhoa=data.sotheodoi.idKhoa;
+      
+
+                //  Load_Khoa_Combobox_ChinhSua(IDTruong,IDKhoa);
+                    // TAI DU LIEU KHOA COMBOBOX
+              
+                   
+                 $("#IDBenhAn").val(data.sotheodoi.idBenhAn).change();   
+                 ///////
+                         let ngayTheoDoi = new Date(data.sotheodoi.ngayTheoDoi);
+                    //let hh1 = String(ngayTheoDoi.getHours()).padStart(2, '0');
+                    //let m1 = String(ngayTheoDoi.getMinutes()).padStart(2, '0');
+                    let dd1 = String(ngayTheoDoi.getDate()).padStart(2, '0');
+                    let mm1 = String(ngayTheoDoi.getMonth() + 1).padStart(2, '0'); //January is 0!
+                    let yyyy1 = ngayTheoDoi.getFullYear();
+                    ngayTheoDoi =     yyyy1+"-"+mm1+"-"+dd1;                     
+                    $('#ngayTheoDoi').val(ngayTheoDoi);
+                   /////////////
+                    $('#nongDoSpo2').val(data.sotheodoi.nongDoSpo2);
+                    $('#sot').val(data.sotheodoi.sot);
+                    ////
+                    let $radios1 = $('input:radio[name=ho]');
+                
+                    $radios1.filter('[value='+data.sotheodoi.ho+']').prop('checked', true);
+                   ////
+                    let $radios2 = $('input:radio[name=khoTho]');
+                
+                    $radios2.filter('[value='+data.sotheodoi.khoTho+']').prop('checked', true);
+                    ////
+                    let $radios3 = $('input:radio[name=dauHong]');
+                
+                    $radios3.filter('[value='+data.sotheodoi.dauHong+']').prop('checked', true);
+
+                    ////
+                    let $radios4 = $('input:radio[name=matViGiac]');
+                
+                    $radios4.filter('[value='+data.sotheodoi.matViGiac+']').prop('checked', true);
+                    ////
+                    let $radios5 = $('input:radio[name=matKhuuGiac]');
+                
+                    $radios5.filter('[value='+data.sotheodoi.matKhuuGiac+']').prop('checked', true);
+
+
+                 
+                    $('#modalSoTheoDoi').modal();
+                }
+
+            });
+            $.ajax({
+                url: '/FileUpload/LayTheoDoiTuongID',
+                type: 'get',
+                data: { doiTuongID: id },
+                success: function (data) {
+                    for (let i = 0; i < data.files.length; i++) {
+                        if (data.files[i].sttTep === 1) {
+                            $('#benhAnDinhKem').attr('href', data.files[i].noiLuuTru);
+                        }
+                        //if (data.files[i].sttTep === 2) {
+                        //    $('#file-name-2').attr('href', data.files[i].noiLuuTru);
+                        //}
+                    }
+                }
+            });
+         });
+        $(document).on('click', "button[name='delete']", function () {
+            let id = $(this).closest('tr').attr('id');
+            var noti = confirm("Bạn có muốn xóa không?");
+            if (noti == true) {
+                $.ajax({
+                    url: 'SoTheoDoi/XoaBo',
+                    type: 'DELETE',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            $('#table-body').empty();
+                            $('#btnSearch').click();
+                            ThongBao(data.msg);
+                        }
+                        else ThongBao(data.msg);
+                    }
+                })
+            } else {
+                alert("You pressed Cancel!");
+            }
+        });
+ 
+        function Load_DSTruong_Combobox() {
+            $.ajax({
+                url: 'Truong/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.truong, function (key, value) {
+                            let option = '<option  value="' + value.idTruong + '" class="form-control">' +  value.tenTruong+ '</option>';
+                            $('#timkiem-timtheoIDTruong').append(option);
+                            $('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+        };
+             function Load_DSKhoa_Combobox() {
+            $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+                            $('#IDKhoa').append(option);
+                        });
+                    }
+                }
+            });
+        };
+        function Load_DSVaccine_Combobox() {
+            $.ajax({
+                url: 'Vaccine/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.vaccine, function (key, value) {
+                            let option = '<option  value="' + value.idVaccine + '" class="form-control">' +  value.tenVaccine+ '</option>';
+                            $('#timkiem-timtheoIDVaccine').append(option);
+                            $('#IDVaccine').append(option);
+                        });
+                    }
+                }
+            });
+        };
+           function Load_DSSinhVien_Combobox() {
+            $.ajax({
+                url: 'SinhVien/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.sinhvien, function (key, value) {
+                            let option = '<option  value="' + value.idSinhVien + '" class="form-control">' +  value.hoTen+ '</option>';
+                            $('#timkiem-timtheoIDSinhVien').append(option);
+                            $('#IDSinhVien').append(option);
+                        });
+                    }
+                }
+            });
+        };
+         function Load_DSBenhAn_Combobox() {
+            $.ajax({
+                url: 'BenhAn/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.benhan, function (key, value) {
+                            let option = '<option  value="' + value.idBenhAn + '" class="form-control">' +  value.ghiChu+ '</option>';
+                            $('#timkiem-timtheoIDBenhAn').append(option);
+                            $('#IDBenhAn').append(option);
+                        });
+                    }
+                }
+            });
+        };
+        function TruongChanged(obj) {
+            var message = document.getElementById('timkiem-timtheoIDTruong');
+            var value = obj.value;
+            $("#timkiem-timtheoIDKhoa").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+                    IDTruong:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#timkiem-timtheoIDKhoa').append(option);
+                         
+                            //$('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+            
+        };
+        
+        function KhoaChanged(obj) {
+            var message = document.getElementById('timkiem-timtheoIDKhoa');
+            var value = obj.value;
+            $("#timkiem-timtheoIDKhoaHoc").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDKhoaHoc').append(option);
+
+              if(value!=''){                 
+             //alert("You selected:"+value);
+                  $.ajax({
+                    url: 'KhoaHoc/DanhSach',
+                    type: 'GET',
+                    data: {
+                        IDKhoa:value
+             
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+            
+                            $.each(data.khoahoc, function (key, value) {
+                                let option = '<option  value="' + value.idKhoaHoc + '" class="form-control">' +  value.khoaHoc+ '</option>';
+                                $('#timkiem-timtheoIDKhoaHoc').append(option);
+                         
+                                //$('#IDTruong').append(option);
+                            });
+                        }
+                    }
+                });
+            }
+            
+        };
+         function KhoaHocChanged(obj) {
+                     var message = document.getElementById('timkiem-timtheoIDKhoaHoc');
+            var value = obj.value;
+            $("#timkiem-timtheoIDSinhVien").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDSinhVien').append(option);
+
+              if(value!=''){    
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'SinhVien/DanhSach',
+                type: 'GET',
+                data: {
+                    IDKhoaHoc:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.sinhvien, function (key, value) {
+                            let option = '<option  value="' + value.idSinhVien + '" class="form-control">' +  value.hoTen+ '</option>';
+                                   $('#timkiem-timtheoIDSinhVien').append(option);
+                         
+             
+                        });
+                    }
+                }
+            });
+            }
+            
+        };
+        function SinhVienChanged(obj) {
+                     var message = document.getElementById('timkiem-timtheoIDSinhVien');
+            var value = obj.value;
+            $("#timkiem-timtheoIDBenhAn").empty();
+           let option = ' <option class="form-control" value="">- Tất cả -</option>';
+                            $('#timkiem-timtheoIDBenhAn').append(option);
+
+              if(value!=''){    
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'BenhAn/DanhSach',
+                type: 'GET',
+                data: {
+                    IDSinhVien:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.benhan, function (key, value) {
+                            let option = '<option  value="' + value.idBenhAn + '" class="form-control">' +  value.ghiChu+ '</option>';
+                                   $('#timkiem-timtheoIDBenhAn').append(option);
+                         
+             
+                        });
+                    }
+                }
+            });
+            }
+            
+        };
+        function Truong2Changed(obj) {
+            var message = document.getElementById('IDTruong');
+            var value = obj.value;
+            $("#IDKhoa").empty();
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+                    IDTruong:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoa, function (key, value) {
+                            let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                            $('#IDKhoa').append(option);
+                         
+                            //$('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+            
+        };
+        function Khoa2Changed(obj) {
+            var message = document.getElementById('IDKhoa');
+            var value = obj.value;
+            $("#IDKhoaHoc").empty();
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'KhoaHoc/DanhSach',
+                type: 'GET',
+                data: {
+                    IDKhoa:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.khoahoc, function (key, value) {
+                            let option = '<option  value="' + value.idKhoaHoc + '" class="form-control">' +  value.khoaHoc+ '</option>';
+                            $('#IDKhoaHoc').append(option);
+                         
+             
+                        });
+                    }
+                }
+            });
+            
+        };
+          function KhoaHoc2Changed(obj) {
+            var message = document.getElementById('IDKhoaHoc');
+            var value = obj.value;
+            $("#IDSinhVien").empty();
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'SinhVien/DanhSach',
+                type: 'GET',
+                data: {
+                    IDKhoaHoc:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.sinhvien, function (key, value) {
+                            let option = '<option  value="' + value.idSinhVien + '" class="form-control">' +  value.hoTen+ '</option>';
+                            $('#IDSinhVien').append(option);
+                         
+             
+                        });
+                    }
+                }
+            });
+            
+        };
+            function SinhVien2Changed(obj) {
+            var message = document.getElementById('IDSinhVien');
+            var value = obj.value;
+            $("#IDBenhAn").empty();
+ 
+
+                                    
+             //alert("You selected:"+value);
+              $.ajax({
+                url: 'BenhAn/DanhSach',
+                type: 'GET',
+                data: {
+                    IDSinhVien:value
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.benhan, function (key, value) {
+                            let option = '<option  value="' + value.idBenhAn + '" class="form-control">' +  value.ghiChu+ '</option>';
+                            $('#IDBenhAn').append(option);
+                         
+             
+                        });
+                    }
+                }
+            });
+            
+        };
+
+        function Load_Khoa_Combobox_ChinhSua(valu, selec) {
+                  
+            $("#IDKhoa").empty();
+                   $.ajax({
+                        url: 'Khoa/DanhSach',
+                        type: 'GET',
+                        data: {
+                            IDTruong:valu
+             
+                        },
+                        success: function (data) {
+       
+                            if (data.code == 200) {
+            
+                                $.each(data.khoa, function (key, value) {
+                                    let option = '<option  value="' + value.idKhoa + '" class="form-control">' +  value.tenKhoa+ '</option>';
+                                    $('#IDKhoa').append(option);
+                                  
+                         
+                                 
+                                });
+                                $("#IDKhoa").val(selec).change(); 
+                            }
+                        }
+                    });
+                    
+                
+        };
+         function Load_PhanTrang() {
+    
+        
+         $('#table-full').dataTable( 
+ 
+             {
+              "language": {
+              "sProcessing":   "Đang xử lý...",
+              "sLengthMenu":   "Xem _MENU_ mục",
+              "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
+              "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+              "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
+              "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+              "sInfoPostFix":  "",
+              "sSearch":       "Tìm:",
+              "sUrl":          "",
+              "oPaginate": {
+                  "sFirst":    "Đầu",
+                  "sPrevious": "Trước",
+                  "sNext":     "Tiếp",
+                  "sLast":     "Cuối"
+                  }
+              },
+              "processing": true, // tiền xử lý trước
+              "aLengthMenu": [[ 10, 20, 50,100,1000,999999], [ 10, 20, 50,100,1000,999999]], // danh sách số trang trên 1 lần hiển thị bảng
+              "order": [[ 1, 'desc' ]] //sắp xếp giảm dần theo cột thứ 1
+             
+          } );
+        };
+
+
+        function destroy() {
+            //   $('#table-full').DataTable( {
+             
+            //} );
+            //         $('#table-full').DataTable( {
+            //    paging: false
+            //} );
+ 
+            $('#table-full').DataTable( {
+                  "bDestroy": true,
+                   
+              "language": {
+              "sProcessing":   "Đang xử lý...",
+              "sLengthMenu":   "Xem _MENU_ mục",
+              "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
+              "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+              "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
+              "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+              "sInfoPostFix":  "",
+              "sSearch":       "Tìm:",
+              "sUrl":          "",
+              "oPaginate": {
+                  "sFirst":    "Đầu",
+                  "sPrevious": "Trước",
+                  "sNext":     "Tiếp",
+                  "sLast":     "Cuối"
+                  }
+              },
+                                "aLengthMenu": [[ 10, 20, 50,100,1000,999999], [ 10, 20, 50,100,1000,999999]], 
+                //searching: false
+            } );
+             }
+        function TaoBang() {
+
+                
+                
+                
+
+            let str = '<thead>';
+            str += '<tr>';
+            str += '<th style="width:10%">STT</th>';
+            str += '<th style="width:10%">Mã bệnh án</th>';
+            str += '<th style="width:15%">Họ tên</th>';
+            str += '<th style="width:10%">Ngày theo dõi</th>';
+            str += '<th style="width:10%">Nồng độ SpO2</th>';
+            str += '<th style="width:10%">Sốt</th> ';
+            str += '<th style="width:10%">Ho</th> ';
+            str += '<th style="width:10%">Khó thở</th>';
+            str += ' <th style="width:10%">Đau họng</th>';
+            str += '<th style="width:10%">Mất vị giác</th>';
+            str += '<th style="width:10%">Mất khứu giác</th>';
+            str += '<th style="width:10%">Chức năng</th>';
+            str += '</thead>';
+            str += '<tbody id="table-body">';
+            str += '</tbody>';                              
+         $('#table-full').append(str);                  
+        };
+         
+              
+ 
+     function exportTableToExcel(tableID, filename = ''){
+            var downloadLink;
+            var dataType = '	application/vnd.ms-excel';
+            var tableSelect = document.getElementById(tableID);
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+            // Specify file name
+            filename = filename?filename+'.xls':'excel_data.xls';
+    
+            // Create download link element
+            downloadLink = document.createElement("a");
+    
+            document.body.appendChild(downloadLink);
+    
+            if(navigator.msSaveOrOpenBlob){
+                var blob = new Blob(['\ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob( blob, filename);
+            }else{
+                // Create a link to the file
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+                // Setting the file name
+                downloadLink.download = filename;
+        
+                //triggering the function
+                downloadLink.click();
+            }
+    }
+      
+
+
+   var ExcelToJSON = function() {
+ 
+      this.parseExcel = function(file) {
+        var reader = new FileReader();
+ 
+        reader.onload = function(e) {
+          var data = e.target.result;
+          var workbook = XLS.read(data, {
+            type: 'binary'
+          });
+           var kq=0;
+             var s1=0;
+            var s2=0;
+         
+          workbook.SheetNames.forEach(function(sheetName) {
+            // Here is your object
+            var XL_row_object = XLS.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+            var json_object = JSON.stringify(XL_row_object);
+            //alert(json_object);
+          
+        
+       
+               
+              
+   
+            console.log(JSON.parse(json_object));
+            jQuery( '#xlx_json' ).val( json_object );
+            //InpuExcel();
+          })
+        };
+ 
+        reader.onerror = function(ex) {
+          console.log(ex);
+        };
+ 
+        reader.readAsBinaryString(file);
+      };
+  };
+ 
+  function handleFileSelect() {
+    
+ 
+    var files = $('#upload')[0].files;; // FileList object
+    var xl2json = new ExcelToJSON();
+    xl2json.parseExcel(files[0]);
+  }
+ 
+       //document.getElementById('nhapdulieu').addEventListener('click', handleFileSelect, false);
+
+
+      function InpuExcel() {
+
+         var json_object = $('#xlx_json').val();
+
+            var myObj = JSON.parse(json_object);
+                            
+            var dong=1;
+            var loi=0;
+            var dongloi='';
+            $.each(myObj, function (key, value) {
+
+
+                   
+   
+                 
+                     var formData3 = new FormData();
+                    
+                    formData3.append('MaSinhVien',  value.MaSinhVien);
+                    formData3.append('NgayBatDauDieuTri',  value.NgayBatDauDieuTri);
+                    formData3.append('NoiDieuTri',  value.NoiDieuTri);
+                    if( value.BienThe !=undefined){
+                                formData3.append('BienThe',  value.BienThe);
+                    }
+            
+                    if(value.TrangThaiDieuTri=="Khỏi bệnh"){
+                        formData3.append('KhoiBenh',  "True");
+                        formData3.append('TuVong',  "False");
+                    }
+                    else{
+                            if(value.TrangThaiDieuTri=="Tử vong"){
+                                formData3.append('KhoiBenh',  "False");
+                                formData3.append('TuVong',  "True");
+                            }
+                            else{
+                                formData3.append('KhoiBenh',  "False");
+                                formData3.append('TuVong',  "False");
+                            }
+
+                    }
+                      if( value.NgayKetThucDieuTri !=undefined)
+                      {
+                     formData3.append('NgayKetThuc',  value.NgayKetThucDieuTri);
+                          
+                      }
+                     
+          
+             
+
+                    formData3.append('GhiChu',  value.MaSoTheoDoi);
+             
+                    
+                  
+                
+                     $.ajax({
+                            url: '/SoTheoDoi/TaoMoi_Excel',
+                            type: 'POST',
+                            data: formData3,
+                            async: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (data) {
+                                dong=dong+1;
+                                if (data.code == 200) {
+                                    console.log(formData3);
+                                 
+                                                      
+                             
+                                
+                                        
+                                } else {
+                       
+                                    loi+=1;
+                                    dongloi+=  dong+";"
+                                }
+                      
+                                             
+                           }        
+                    
+                    });
+                   
+                  
+     
+                       
+
+                    
+
+           });
+             if(loi==0){
+                 ThongBao("Tất cả thành công");
+             }
+             else{
+                    ThongBao("Dòng lỗi: "+dongloi+" tổng số dòng lỗi:"+loi);
+             }
+                
+
+             $('#btnSearch').click();
+  }
+     $("#fileSoTheoDoiDinhKem").change(function () {
+            let inputfile = document.getElementById("fileSoTheoDoiDinhKem").files;
+            let file = inputfile[0];
+            $('#file-info-1').show();
+            $('#benhAnDinhKem').text(file.name);
+            //$("#benhAnDinhKem").attr("href",  "\\files\\ChiTietTiem\\" +file.name);
+
+        });
+
+    </script>
+}

@@ -1,0 +1,328 @@
+﻿@model QuanLyCovidDHH.Web.Models.Vaccine.TaoMoi
+@{
+    ViewData["Title"] = "Vaccine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="table--database">
+    <div class="container">
+        <div class="section--title">
+            <h3>DANH SÁCH THÔNG TIN VACCINE </h3>
+            <hr />
+            <form>
+               
+                <div class="row d-flex justify-content-between" style="padding: 15px">
+                    <a class="btn btn-success" id="btnAdd" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fa fa-plus"></i>
+                        <span>Thêm mới</span>
+                    </a>
+                
+                 
+                </div>
+            </form>
+        </div>
+        <div class="box-bordertop">
+            <table class="table table-hover table-bordered" id="">
+                <thead>
+                    <tr>
+                        <th style="width:10%">STT</th>
+                        <th style="width:60%">Tên Vaccine</th>
+                        
+                        <th style="width:15%">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalVaccine" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-center m-2" id="modal-title">TRƯỜNG</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form enctype="multipart/form-data" id="formVaccine" method="post">
+                    <div class="modal-body">
+                        <input type="text" hidden id="hiddenvalue" value="" /> <!--Phân biệt nút Lưu lại trong Tạo mới và Chỉnh sửa-->
+                        <div class="errorTxt form-group" id="errorTxt"></div> <!--Khu vực validate-->
+                        <div class="row">
+                       
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên vaccine</label>
+                                    <input id="tenVaccine" name="tenVaccine" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                    
+                      
+                           
+                        <div class="form-group">
+                            <div id="trangThai" name="trangThai">
+                                <label>Trạng thái: </label>
+                                <input type="radio" id="trangThai" name="trangThai" value="1" />Tạm dừng
+                                <input type="radio" id="trangThai" name="trangThai" value="0" />Đang hoạt động
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="btnSubmit">Lưu lại</button>
+                            <button type="button" class="btn btn-secondary" id="btnClose" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notification">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="notiMessenger"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnConfirm">Xác nhận</button>
+                <button type="button" class="btn btn-danger" id="btnClose" data-dismiss="modal">Đóng lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            Load_Danhsach_Vaccine();
+            ValidateForm();
+            $('#trangThai').hide();
+            //$('#ngayBanHanh').datepicker();
+
+        });
+        function ResetForm() {
+            //$("#loVaccine").val('');
+            $("#tenVaccine").val('');
+          
+
+        };
+         function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+        function ValidateForm() {
+            $("form[id='formVaccine']").validate({
+                rules: {
+               
+                    tenVaccine: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                  
+                   
+                },
+                messages: {
+                 
+                    tenVaccine: {
+                        required: "Vui lòng nhập Tên vaccine",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 ký tự"
+                    },
+                
+                    
+                },
+                errorElement: 'div',
+                errorLabelContainer: '.errorTxt',
+                submitHandler: function (form) {
+                }
+            });
+        }
+        $('#btnAdd').click(function () {
+            ResetForm();
+            $('#trangThai').hide();
+      
+            $('#hiddenvalue').val(''); // Hidden id
+            $('#modalVaccine').modal();
+        });
+        function Load_Danhsach_Vaccine() {
+            $.ajax({
+                url: 'Vaccine/DanhSach',
+                type: 'GET',
+                data: {
+             
+
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        let stt = 0;
+
+                        $.each(data.vaccine, function (key, value) {
+
+                             stt = stt + 1;
+
+                            let tr = '<tr id="' + value.idVaccine+ '">';
+                            tr += '<td>' + stt + '</td>';               
+                            tr += '<td>' + value.tenVaccine + '</td>';
+                          
+                   
+          
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+                        });
+                  
+                    }
+                }
+            });
+        };
+
+        
+
+       function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+
+         $('#btnSubmit').click(function () {
+            let hiddenvalue = $('#hiddenvalue').val();
+
+            let tenVaccine = $('#tenVaccine').val().trim();
+            let loVaccine =  null;//$('#loVaccine').val().trim();
+           
+            //let trangThai = $('input[id="trangThai"]:checked').val();
+
+            let formData1 = new FormData();
+
+            formData1.append('tenVaccine', tenVaccine);
+                        formData1.append('loVaccine', loVaccine);
+
+         
+
+            let formData2 = new FormData();
+            formData2 = formData1;
+            formData2.append('iDVaccine', hiddenvalue);
+                ThongBao(hiddenvalue);
+            //formData2.append('trangThai', trangThai);
+           
+          
+
+            if ($("#formVaccine").valid()) {
+                if (hiddenvalue.length == 0) {
+                    //Thêm mới
+                    $.ajax({
+                        url: '/Vaccine/TaoMoi',
+                        type: 'POST',
+                        data: formData1,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                console.log(formData1);
+                                ResetForm();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                                $('#table-body').empty();
+                                Load_Danhsach_Vaccine();
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    });
+                }
+                else if (hiddenvalue.length != 0) {
+                    //Chỉnh sửa
+                    //alert(ngayBanHanh);
+                    $.ajax({
+                        url: '/Vaccine/ChinhSua',
+                        type: 'PUT',
+                        data: formData2,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                $('#table-body').empty();
+                                Load_Danhsach_Vaccine();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    })
+                }
+            }
+        });
+
+         $(document).on('click', "button[name='edit']", function () {
+            ResetForm();
+
+            //$('#trangThai').show();
+            let id = $(this).closest('tr').attr('id');
+            $('#hiddenvalue').val(id);
+
+
+            $.ajax({
+                url: '/Vaccine/LayTheoID',
+                type: 'GET',
+                data: { id: id },
+                success: function (data) {
+                    let $radios = $('input:radio[name=trangThai]');
+                    $('#loVaccine').val(data.vaccine.loVaccine);
+                    $('#tenVaccine').val(data.vaccine.tenVaccine);
+                
+                    if (data.vaccine.trangThai === 0) {
+                        $radios.filter('[value=0]').prop('checked', true);
+                    }
+                    else if (data.vaccine.trangThai === 1) {
+                        $radios.filter('[value=1]').prop('checked', true);
+                    }
+                    $('#modalVaccine').modal();
+                }
+            });
+  
+         });
+        $(document).on('click', "button[name='delete']", function () {
+            let id = $(this).closest('tr').attr('id');
+            var noti = confirm("Bạn có muốn xóa không?");
+            if (noti == true) {
+                $.ajax({
+                    url: 'Vaccine/XoaBo',
+                    type: 'DELETE',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            $('#table-body').empty();
+                            Load_Danhsach_Vaccine();
+                            ThongBao(data.msg);
+                        }
+                        else ThongBao(data.msg);
+                    }
+                })
+            } else {
+                alert("You pressed Cancel!");
+            }
+        });
+ 
+    </script>
+}

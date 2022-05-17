@@ -1,0 +1,887 @@
+﻿@model QuanLyCovidDHH.Web.Models.KhaiBaoXetNghiem.TaoMoi
+
+@{
+    ViewData["Title"] = "KhaiBaoXetNghiem";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+<div class="table--database">
+    <div class="container">
+        <div class="section--title">
+            <h3>DANH SÁCH THÔNG TIN KHAI BÁO XÉT NGHIỆM</h3>
+            <hr />
+            <form>
+        
+                <div class="row">
+                         <div class="col">
+                  
+                                <label class="control-label">Loại xét nghiệm</label>
+                                <select class="form-control" id="timkiem-timtheoLoaiXetNghiem">
+                                    <option class="form-control" value="">- Tất cả -</option>
+                                    <option class="form-control" value="Nhanh- Kháng nguyên">Nhanh - Kháng nguyên</option>
+                                    <option class="form-control" value="Nhanh- Kháng thể">Nhanh - Kháng thể</option>
+                                    <option class="form-control" value="RT-PCR">RealTime -PCR</option>
+                                </select>
+                            </div>
+
+                      <div class="col">
+                            
+                               <label class="control-label">Kết quả xét nghiệm</label>
+                                <select class="form-control" id="timkiem-timtheoKetQuaXetNghiem">
+                                    <option class="form-control" value="">- Tất cả -</option>
+                                    <option class="form-control" value="Âm tính">Âm tính</option>
+                                    <option class="form-control" value="Dương tính">Dương tính</option>
+
+                                </select>
+                            </div>
+
+                         <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Ngày </label>
+                                    <input id="timkiem-timtheoNgay" name="timkiem-timtheoNgay" class="form-control" type="date" />
+                                </div>
+                            </div>
+                    <div class="col">
+
+
+                        <label>Trạng thái duyệt</label>
+                        <select class="form-control" id="timkiem-timtheoTrangThaiDuyet">
+                            <option class="form-control" value="">- Tất cả -</option>
+                            <option class="form-control" value="1">Đã duyệt</option>
+                            <option class="form-control" value="0">Chưa duyệt</option>
+                            <option class="form-control" value="-1">Đã huỷ</option>
+                        </select>
+                    </div>
+           @*         <div class="col">
+                        <label>Tìm theo khoá học hoặc năm tuyển sinh</label>
+                        <input type="text" class="form-control" id="timkiem-timtheotukhoa">
+                    </div>*@
+                  
+                </div>
+                <div class="row d-flex justify-content-between" style="padding: 15px">
+                    <a class="btn btn-success" id="btnAdd" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fa fa-plus"></i>
+                        <span>Thêm mới</span>
+                    </a>
+                
+                    <a class="btn btn-primary" id="btnSearch">
+                        <i class="fa fa-search"></i>
+                        <span>Tìm kiếm</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+      
+        <div class="box-bordertop"> 
+        
+       
+            <table class="table table-hover table-bordered" id="table-full">
+                
+            </table>
+                  
+                  <button class="btn btn-success" onclick="exportTableToExcel('table-full', 'khaibaoxetnghiem-data')">Xuất File Excel</button>
+                 
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalKhaiBaoXetNghiem" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-center m-2" id="modal-title">Khai báo xét nghiệm</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form enctype="multipart/form-data" id="formKhaiBaoXetNghiem" method="post">
+                    <div class="modal-body">
+                        <input type="text" hidden id="hiddenvalue" value="" /> <!--Phân biệt nút Lưu lại trong Tạo mới và Chỉnh sửa-->
+                        <div class="errorTxt form-group" id="errorTxt"></div> <!--Khu vực validate-->
+           
+                 
+
+                          <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Sinh viên</label>
+                                   
+                                     <select class="form-control" id="IDSinhVien">
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                         <div class="row">
+                            <div class="col">
+                  
+                                <label class="control-label">Loại xét nghiệm</label>
+                                <select class="form-control" id="loaiXetNghiem">
+       
+                                    <option class="form-control" value="Nhanh- Kháng nguyên">Nhanh - Kháng nguyên</option>
+                                    <option class="form-control" value="Nhanh- Kháng thể">Nhanh - Kháng thể</option>
+                                    <option class="form-control" value="RT-PCR">RealTime -PCR</option>
+                                </select>
+                            </div>
+                        </div>
+                       <div class="row">
+                            <div class="col">
+                            
+                               <label class="control-label">Kết quả xét nghiệm</label>
+                                <select class="form-control" id="ketQuaXetNghiem">
+       
+                                    <option class="form-control" value="Âm tính">Âm tính</option>
+                                    <option class="form-control" value="Dương tính">Dương tính</option>
+
+                                </select>
+                            </div>
+                        </div>
+                       <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Ngày xét nghiệm</label>
+                                    <input id="ngayXetNghiem" name="ngayXetNghiem" class="form-control" type="date" />
+                                </div>
+                            </div>
+                        </div>
+         
+
+                        <div class="row">
+                            <div class="col">
+                           
+
+                                    <div class="form-group">
+                                    <label class="control-label">Hình ảnh xét nghiệm</label>
+                                    <div class="file-info" id="file-info-1">
+                                        <div class="file-icon"><i class="fa fa-file-word fa-2x"></i></div>
+                                        <div class="file-content">
+                                            <a class="hinhAnhXetNghiem" id="hinhAnhXetNghiem"></a>
+                                        </div>
+                                    </div>
+                                    <div class="custom-file" id="custom-file-1">
+                                        <label for="fileHinhAnhXetNghiem">Đính kèm</label>
+                                        <input type="file" id="fileHinhAnhXetNghiem" name="fileHinhAnhXetNghiem" />
+                                    </div>
+                                </div>
+
+                            </div>
+                          
+                        </div>
+                             
+                    <div class="row" id="trangThaiDuyetALL">                  
+                    <div class="col">
+
+
+                        <label>Trạng thái duyệt</label>
+                        <select class="form-control" id="trangThaiDuyet">
+
+                            <option class="form-control" value="1">Đã duyệt</option>
+                            <option class="form-control" value="0">Chưa duyệt</option>
+                            <option class="form-control" value="-1">Đã huỷ</option>
+                        </select>
+                    </div>
+                      </div>
+
+          
+                         <div class="row" id="lyDoALL">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Lý do</label>
+                                    <input id="lyDo" name="lyDo" class="form-control" type="text"  />
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row" id="ghiChuALL">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Ghi chú</label>
+                                    <input id="ghiChu" name="ghiChu" class="form-control" type="text"  />
+                                </div>
+                            </div>
+                        </div>
+                           
+        
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="btnSubmit">Lưu lại</button>
+                            <button type="button" class="btn btn-secondary" id="btnClose" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notification">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="notiMessenger"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnConfirm">Xác nhận</button>
+                <button type="button" class="btn btn-danger" id="btnClose" data-dismiss="modal">Đóng lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+ 
+   <input type="text" hidden id="UserName" value=@User.Identity.Name />
+
+
+@section scripts{
+
+      
+
+    <script>
+           let UserName = $('#UserName').val();
+           var IDSV=null;
+        $(document).ready(function () {
+       
+            Load_IDSinhVien();
+            Load_DSSinhVien_Combobox();
+            Load_Danhsach_KhaiBaoXetNghiem();
+
+            
+
+            ValidateForm();
+          
+            //  var today = new Date();
+            //let dd2 = String(today.getDate()).padStart(2, '0');
+            //let mm2 = String(today.getMonth() + 1).padStart(2, '0'); January is 0!
+            //let yyyy2 = today.getFullYear();
+            //$("#timkiem-timtheoNgay").val(yyyy2+"-"+mm2+"-"+dd2);
+
+
+        });
+        function ResetForm() {
+                     $('#loaiXetNghiem').val('');
+
+                    $('#ketQuaXetNghiem').val(new Date());
+                    $('#ngayXetNghiem').val(new Date());
+        
+            
+           
+                    $("#hinhAnXetNghiem").val('');
+       
+
+            
+          
+
+        };
+         function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+        function ValidateForm() {
+            $("form[id='formKhaiBaoXetNghiem']").validate({
+                rules: {
+                    maKhoa: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                    tenKhoa: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                  
+                   
+                },
+                messages: {
+                    maKhoa: {
+                        required: "Vui lòng nhập Mã khoa",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 kí tự"
+                    },
+                    tenKhoa: {
+                        required: "Vui lòng nhập Tên khoa",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 ký tự"
+                    },
+                
+                    
+                },
+                errorElement: 'div',
+                errorLabelContainer: '.errorTxt',
+                submitHandler: function (form) {
+                }
+            });
+        }
+        $('#btnAdd').click(function () {
+            ResetForm();
+            $("#btnSubmit").show();
+            $("#ghiChuALL").hide();
+            $("#lyDoALL").hide();
+            $("#trangThaiDuyetALL").hide();
+            $("#IDSinhVien").prop('disabled', true);
+            $("#trangThaiDuyet").val('0').change();   
+            $('#hiddenvalue').val(''); // Hidden id
+            $('#modalKhaiBaoXetNghiem').modal();
+        });
+        function Load_Danhsach_KhaiBaoXetNghiem() {
+            TaoBang();
+
+            $.ajax({
+                url: 'KhaiBaoXetNghiem/DanhSach',
+                type: 'GET',
+                data: {
+
+                    IDSinhVien:IDSV,
+                    IDKhoaHoc: null,
+                    IDKhoa: null,
+                    IDTruong: null,
+                    LoaiXetNghiem:null,
+                    KetQuaXetNghiem:null,
+                    Ngay:null,
+                    TrangThaiDuyet:null
+             
+
+                },
+                success: function (data) {
+                            
+                    if (data.code == 200) {
+                        let stt = 0;
+                 
+                        $.each(data.khaibaoxetnghiem, function (key, value) {
+
+                             stt = stt + 1;
+                       
+                             let tr = '<tr id="' + value.idKhaiBaoXetNghiem+ '">';
+                            tr += '<td>' + stt + '</td>';  
+                            tr += '<td>' + value.maSinhVien + '</td>';
+                            tr += '<td>' + value.hoTen + '</td>';
+                            tr += '<td>' + value.loaiXetNghiem + '</td>';
+                            tr += '<td>' + value.ketQuaXetNghiem + '</td>';
+               
+                             //Convert Datetime to String
+                            let ngayXetNghiem = new Date(value.ngayXetNghiem);
+                            //let hh1 = String(ngayXetNghiem.getHours()).padStart(2, '0');
+                            //let m1 = String(ngayXetNghiem.getMinutes()).padStart(2, '0');
+                            let dd1 = String(ngayXetNghiem.getDate()).padStart(2, '0');
+                            let mm1 = String(ngayXetNghiem.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy1 = ngayXetNghiem.getFullYear();
+                            ngayXetNghiem =  dd1 + '/' + mm1 + '/' + yyyy1;
+                            tr += '<td>' + ngayXetNghiem + '</td>';
+                           
+                          
+                            if (value.hinhAnhXetNghiem  == null || value.hinhAnhXetNghiem  == '' ) {
+                                    tr += '<td>Không có</td>';
+                            }
+                            else{
+                               tr += '<td>' + value.hinhAnhXetNghiem + '</td>';
+                            }
+                            
+                            ////////////
+                            if(value.trangThaiDuyet=='1'){
+                                 tr += '<td>Đã duyệt</td>';
+                            }
+                            else{
+                                  if(value.trangThaiDuyet=='0'){
+                                         tr += '<td>Chưa duyệt</td>';
+                                    }
+                                    else{                                            
+                                         tr += '<td>Đã huỷ</td>';                                        
+                                     }
+                            }
+
+                        
+                            //////////
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            if(value.trangThaiDuyet =='0'){
+                                    tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            }
+        
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+                        });
+                   Load_PhanTrang();
+                    }
+                }
+            });
+        };
+
+        $('#btnSearch').click(function () {
+
+
+        
+             let LoaiXetNghiem = $('#timkiem-timtheoLoaiXetNghiem').val().trim();
+             let KetQuaXetNghiem = $('#timkiem-timtheoKetQuaXetNghiem').val().trim();
+            let Ngay = $('#timkiem-timtheoNgay').val().trim();
+            let TrangThaiDuyet = $('#timkiem-timtheoTrangThaiDuyet').val().trim();
+            
+            
+
+            let tukhoa = $('#timkiem-timtheotukhoa').val();
+            //alert(idtruong+idkhoa+idkhoahoc);
+            $.ajax({
+                url: 'KhaiBaoXetNghiem/DanhSach',
+                type: 'GET',
+                data: {
+                    IDSinhVien:IDSV,     
+                    IDKhoaHoc:null,
+                    IDKhoa: null,
+                    IDTruong: null,
+                    LoaiXetNghiem:LoaiXetNghiem,
+                    KetQuaXetNghiem:KetQuaXetNghiem,
+                    Ngay:Ngay,
+                    TrangThaiDuyet:TrangThaiDuyet
+              
+                },
+                success: function (data) {
+               if (data.code == 200) {
+                        let stt = 0;
+              
+                        $('#table-full').empty();
+                       
+                        TaoBang();
+                         
+                        $.each(data.khaibaoxetnghiem, function (key, value) {
+                               stt = stt + 1;
+                       
+                             let tr = '<tr id="' + value.idKhaiBaoXetNghiem+ '">';
+                            tr += '<td>' + stt + '</td>';  
+                            tr += '<td>' + value.maSinhVien + '</td>';
+                            tr += '<td>' + value.hoTen + '</td>';
+                            tr += '<td>' + value.loaiXetNghiem + '</td>';
+                            tr += '<td>' + value.ketQuaXetNghiem + '</td>';
+               
+                             //Convert Datetime to String
+                            let ngayXetNghiem = new Date(value.ngayXetNghiem);
+                            //let hh1 = String(ngayXetNghiem.getHours()).padStart(2, '0');
+                            //let m1 = String(ngayXetNghiem.getMinutes()).padStart(2, '0');
+                            let dd1 = String(ngayXetNghiem.getDate()).padStart(2, '0');
+                            let mm1 = String(ngayXetNghiem.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy1 = ngayXetNghiem.getFullYear();
+                            ngayXetNghiem =  dd1 + '/' + mm1 + '/' + yyyy1;
+                            tr += '<td>' + ngayXetNghiem + '</td>';
+                           
+                          
+                            if (value.hinhAnhXetNghiem  == null || value.hinhAnhXetNghiem  == '' ) {
+                                    tr += '<td>Không có</td>';
+                            }
+                            else{
+                               tr += '<td>' + value.hinhAnhXetNghiem + '</td>';
+                            }
+                            
+                            ////////////
+                            if(value.trangThaiDuyet=='1'){
+                                 tr += '<td>Đã duyệt</td>';
+                            }
+                            else{
+                                  if(value.trangThaiDuyet=='0'){
+                                         tr += '<td>Chưa duyệt</td>';
+                                    }
+                                    else{                                            
+                                         tr += '<td>Đã huỷ</td>';                                        
+                                     }
+                            }
+
+                         
+                            //////////
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            if(value.trangThaiDuyet =='0'){
+                                    tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            }
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+                        });
+                        destroy();
+                   //Load_PhanTrang();
+                       
+                    }
+                }
+            });
+        });
+
+       function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+
+         $('#btnSubmit').click(function () {
+            let hiddenvalue = $('#hiddenvalue').val();
+
+
+        
+
+
+
+            let loaiXetNghiem = $('#loaiXetNghiem').val().trim();
+            let ketQuaXetNghiem = $('#ketQuaXetNghiem').val().trim();
+            let ngayXetNghiem = $('#ngayXetNghiem').val().trim();
+
+
+            let fileHinhAnhXetNghiem = $('#fileHinhAnhXetNghiem')[0].files[0];
+   
+      
+
+
+            let formData1 = new FormData();
+
+            formData1.append('iDSinhVien', IDSV);
+            formData1.append('loaiXetNghiem', loaiXetNghiem);
+            formData1.append('ketQuaXetNghiem', ketQuaXetNghiem);
+            formData1.append('ngayXetNghiem', ngayXetNghiem);
+
+             
+  
+            formData1.append('fileHinhAnhXetNghiem', fileHinhAnhXetNghiem);
+            formData1.append('trangThaiDuyet', '0');
+
+            formData1.append('lyDo', '');
+         
+            formData1.append('ghiChu', '');
+         
+
+            let formData2 = new FormData();
+            formData2 = formData1;
+            formData2.append('iDKhaiBaoXetNghiem', hiddenvalue);
+            formData2.append('hinhAnhXetNghiem', $("#hinhAnhXetNghiem").text());
+                
+            //formData2.append('trangThai', trangThai);
+           
+          
+
+            if ($("#formKhaiBaoXetNghiem").valid()) {
+                if (hiddenvalue.length == 0) {
+                    //Thêm mới
+                    $.ajax({
+                        url: '/KhaiBaoXetNghiem/TaoMoi',
+                        type: 'POST',
+                        data: formData1,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                console.log(formData1);
+                                ResetForm();
+                                $('#table-body').empty();
+                                        $('#btnSearch').click();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                                
+                         
+                           
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    });
+                }
+                else if (hiddenvalue.length != 0) {
+                    //Chỉnh sửa
+
+                    $.ajax({
+                        url: '/KhaiBaoXetNghiem/ChinhSua',
+                        type: 'PUT',
+                        data: formData2,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                $('#table-body').empty();
+                                  $('#btnSearch').click();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    })
+                }
+            }
+        });
+
+         $(document).on('click', "button[name='edit']", function () {
+            ResetForm();
+        
+      
+            //$('#trangThai').show();
+            let id = $(this).closest('tr').attr('id');
+            $('#hiddenvalue').val(id);
+
+                $("#IDSinhVien").prop('disabled', true);
+                $("#trangThaiDuyet").prop('disabled', true);  
+             
+             
+            $.ajax({
+                url: '/KhaiBaoXetNghiem/LayTheoID',
+                type: 'GET',
+                data: { id: id },
+                success: function (data) {
+
+                    if(data.khaibaoxetnghiem.trangThaiDuyet =='0'){
+                            $("#btnSubmit").show();
+                            $("#ghiChuALL").hide();
+                            $("#lyDoALL").hide();
+                             $("#trangThaiDuyetALL").hide();
+                    }
+                    else{
+                            $("#btnSubmit").hide();
+                            $("#ghiChuALL").show();
+                            $("#lyDoALL").show();
+                            $("#trangThaiDuyetALL").show();
+                            $("#lyDo").prop('disabled', true);  
+                            $("#ghiChu").prop('disabled', true);  
+                    }
+            
+                $("#IDSinhVien").val(data.khaibaoxetnghiem.idSinhVien).change();   
+          
+              
+                  
+                    $('#loaiXetNghiem').val(data.khaibaoxetnghiem.loaiXetNghiem).change(); 
+                    $('#ketQuaXetNghiem').val(data.khaibaoxetnghiem.ketQuaXetNghiem).change(); 
+                     let ngayXetNghiem = new Date(data.khaibaoxetnghiem.ngayXetNghiem);
+                            //let hh1 = String(ngayXetNghiem.getHours()).padStart(2, '0');
+                            //let m1 = String(ngayXetNghiem.getMinutes()).padStart(2, '0');
+                            let dd1 = String(ngayXetNghiem.getDate()).padStart(2, '0');
+                            let mm1 = String(ngayXetNghiem.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy1 = ngayXetNghiem.getFullYear();
+                      
+                    $('#ngayXetNghiem').val(yyyy1+"-"+mm1+"-"+dd1);
+             
+          
+
+                 
+                    $('#hinhAnhXetNghiem').text(data.khaibaoxetnghiem.hinhAnhXetNghiem);
+                    $("#hinhAnhXetNghiem").attr("href",  "\\files\\KhaiBaoXetNghiem\\" +data.khaibaoxetnghiem.hinhAnhXetNghiem);
+                     $("#trangThaiDuyet").val(data.khaibaoxetnghiem.trangThaiDuyet).change();   
+                            
+                    $('#lyDo').val(data.khaibaoxetnghiem.lyDo);  
+                    $('#ghiChu').val(data.khaibaoxetnghiem.ghiChu);               
+                 
+                    $('#modalKhaiBaoXetNghiem').modal();
+                }
+
+            });
+            $.ajax({
+                url: '/FileUpload/LayTheoDoiTuongID',
+                type: 'get',
+                data: { doiTuongID: id },
+                success: function (data) {
+                    for (let i = 0; i < data.files.length; i++) {
+                        if (data.files[i].sttTep === 1) {
+                            $('#hinhAnhXetNghiem').attr('href', data.files[i].noiLuuTru);
+                        }
+                        //if (data.files[i].sttTep === 2) {
+                        //    $('#file-name-2').attr('href', data.files[i].noiLuuTru);
+                        //}
+                    }
+                }
+            });
+         });
+        $(document).on('click', "button[name='delete']", function () {
+            let id = $(this).closest('tr').attr('id');
+            var noti = confirm("Bạn có muốn xóa không?");
+            if (noti == true) {
+                $.ajax({
+                    url: 'KhaiBaoXetNghiem/XoaBo',
+                    type: 'DELETE',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            $('#table-body').empty();
+                            $('#btnSearch').click();
+                            ThongBao(data.msg);
+                        }
+                        else ThongBao(data.msg);
+                    }
+                })
+            } else {
+                alert("You pressed Cancel!");
+            }
+        });
+ 
+      
+           function Load_DSSinhVien_Combobox() {
+            $.ajax({
+                url: 'SinhVien/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.sinhvien, function (key, value) {
+                            let option = '<option  value="' + value.idSinhVien + '" class="form-control">' +  value.hoTen+ '</option>';
+ 
+                            $('#IDSinhVien').append(option);
+                        });
+                    }
+                }
+            });
+        };
+
+     
+
+         function Load_PhanTrang() {
+    
+        
+         $('#table-full').dataTable( 
+ 
+             {
+              "language": {
+              "sProcessing":   "Đang xử lý...",
+              "sLengthMenu":   "Xem _MENU_ mục",
+              "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
+              "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+              "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
+              "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+              "sInfoPostFix":  "",
+              "sSearch":       "Tìm:",
+              "sUrl":          "",
+              "oPaginate": {
+                  "sFirst":    "Đầu",
+                  "sPrevious": "Trước",
+                  "sNext":     "Tiếp",
+                  "sLast":     "Cuối"
+                  }
+              },
+              "processing": true, // tiền xử lý trước
+              "aLengthMenu": [[ 10, 20, 50,100,1000,999999], [ 10, 20, 50,100,1000,999999]], // danh sách số trang trên 1 lần hiển thị bảng
+              "order": [[ 1, 'desc' ]] //sắp xếp giảm dần theo cột thứ 1
+             
+          } );
+        };
+
+
+        function destroy() {
+            //   $('#table-full').DataTable( {
+             
+            //} );
+            //         $('#table-full').DataTable( {
+            //    paging: false
+            //} );
+ 
+            $('#table-full').DataTable( {
+                  "bDestroy": true,
+                   
+              "language": {
+              "sProcessing":   "Đang xử lý...",
+              "sLengthMenu":   "Xem _MENU_ mục",
+              "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
+              "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+              "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
+              "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+              "sInfoPostFix":  "",
+              "sSearch":       "Tìm:",
+              "sUrl":          "",
+              "oPaginate": {
+                  "sFirst":    "Đầu",
+                  "sPrevious": "Trước",
+                  "sNext":     "Tiếp",
+                  "sLast":     "Cuối"
+                  }
+              },
+                                "aLengthMenu": [[ 10, 20, 50,100,1000,999999], [ 10, 20, 50,100,1000,999999]], 
+                //searching: false
+            } );
+             }
+        function TaoBang() {
+
+                
+                
+                
+
+            let str = '<thead>';
+            str += '<tr>';
+            str += '<th style="width:10%">STT</th>';
+            str += '<th style="width:15%">Mã sinh viên</th>';
+            str += '<th style="width:15%">Họ Tên</th>';
+            str += '<th style="width:10%">Loại xét nghiệm</th>';
+            str += '<th style="width:10%">Kết quả</th> ';
+            str += '<th style="width:10%">Ngày xét nghiệm</th> ';
+            str += '<th style="width:10%">Đính kèm</th>';
+            str += '<th style="width:10%">Trạng thái</th>';
+
+            str += '<th style="width:10%">Chức năng</th>';
+            str += '</thead>';
+            str += '<tbody id="table-body">';
+            str += '</tbody>';                              
+         $('#table-full').append(str);                  
+        };
+         
+              
+ 
+     function exportTableToExcel(tableID, filename = ''){
+            var downloadLink;
+            var dataType = '	application/vnd.ms-excel';
+            var tableSelect = document.getElementById(tableID);
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+            // Specify file name
+            filename = filename?filename+'.xls':'excel_data.xls';
+    
+            // Create download link element
+            downloadLink = document.createElement("a");
+    
+            document.body.appendChild(downloadLink);
+    
+            if(navigator.msSaveOrOpenBlob){
+                var blob = new Blob(['\ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob( blob, filename);
+            }else{
+                // Create a link to the file
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+                // Setting the file name
+                downloadLink.download = filename;
+        
+                //triggering the function
+                downloadLink.click();
+            }
+    }
+      
+
+
+
+        $("#fileHinhAnhXetNghiem").change(function () {
+            let inputfile = document.getElementById("fileHinhAnhXetNghiem").files;
+            let file = inputfile[0];
+            $('#file-info-1').show();
+            $('#hinhAnhXetNghiem').text(file.name);
+            //$("#hinhAnhXetNghiem").attr("href",  "\\files\\KhaiBaoXetNghiem\\" +file.name);
+
+        });
+
+        function Load_IDSinhVien() {
+          $.ajax({
+                url: '/SinhVien/LayTheoTenDangNhap',
+                type: 'GET',
+                async: false,
+                data: { TenDangNhap: UserName },
+                success: function (data) {
+            
+                    IDSV=data.sinhvien.idSinhVien;
+                
+                //$("#IDSV").val(data.sinhvien.idSinhVien);   
+                }
+
+            });
+            }
+    </script>
+}

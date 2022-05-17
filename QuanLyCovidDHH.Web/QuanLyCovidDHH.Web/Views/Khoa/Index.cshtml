@@ -1,0 +1,441 @@
+﻿@model QuanLyCovidDHH.Web.Models.Khoa.TaoMoi
+@{
+    ViewData["Title"] = "Khoa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="table--database">
+    <div class="container">
+        <div class="section--title">
+            <h3>DANH SÁCH THÔNG TIN KHOA </h3>
+            <hr />
+            <form>
+                <div class="row">
+                    <div class="col">
+                        <label>Trường</label>
+                        <select class="form-control" id="timkiem-timtheoIDTruong">
+                            <option class="form-control" value="">- Tất cả -</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Tìm theo tên khoa</label>
+                        <input type="text" class="form-control" id="timkiem-timtheotukhoa">
+                    </div>
+                    <!--  <div class="col">
+                        <label>Skill</label>
+                        <input type="text" class="form-control" id="timkiem-timtheoskill">
+                    </div>
+                    -->
+                </div>
+                <div class="row d-flex justify-content-between" style="padding: 15px">
+                    <a class="btn btn-success" id="btnAdd" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fa fa-plus"></i>
+                        <span>Thêm mới</span>
+                    </a>
+                
+                    <a class="btn btn-primary" id="btnSearch">
+                        <i class="fa fa-search"></i>
+                        <span>Tìm kiếm</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+        <div class="box-bordertop">
+            <table class="table table-hover table-bordered" id="">
+                <thead>
+                    <tr>
+                        <th style="width:10%">STT</th>
+                        <th style="width:30%">Tên Khoa</th>
+                        <th style="width:15%">Mã Khoa</th>
+                        <th style="width:30%">Tên Trường</th>
+
+                        <th style="width:15%">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalKhoa" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-center m-2" id="modal-title">KHOA</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form enctype="multipart/form-data" id="formKhoa" method="post">
+                    <div class="modal-body">
+                        <input type="text" hidden id="hiddenvalue" value="" /> <!--Phân biệt nút Lưu lại trong Tạo mới và Chỉnh sửa-->
+                        <div class="errorTxt form-group" id="errorTxt"></div> <!--Khu vực validate-->
+                      
+
+                     <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên trường</label>
+                                   
+                                     <select class="form-control" id="IDTruong">
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Tên khoa</label>
+                                    <input id="tenKhoa" name="tenKhoa" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Mã khoa</label>
+                                    <input id="maKhoa" name="maKhoa" class="form-control" type="text" />
+                                </div>
+                            </div>
+                          
+                        </div>
+                    
+                      
+                           
+                        <div class="form-group">
+                            <div id="trangThai" name="trangThai">
+                                <label>Trạng thái: </label>
+                                <input type="radio" id="trangThai" name="trangThai" value="1" />Tạm dừng
+                                <input type="radio" id="trangThai" name="trangThai" value="0" />Đang hoạt động
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="btnSubmit">Lưu lại</button>
+                            <button type="button" class="btn btn-secondary" id="btnClose" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notification">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="notiMessenger"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnConfirm">Xác nhận</button>
+                <button type="button" class="btn btn-danger" id="btnClose" data-dismiss="modal">Đóng lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+
+        $(document).ready(function () {
+            Load_Danhsach_Khoa();
+            Load_DSTruong_Combobox()
+            ValidateForm();
+            $('#trangThai').hide();
+            //$('#ngayBanHanh').datepicker();
+
+        });
+        function ResetForm() {
+            $("#maKhoa").val('');
+            $("#tenKhoa").val('');
+          
+
+        };
+         function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+        function ValidateForm() {
+            $("form[id='formKhoa']").validate({
+                rules: {
+                    maKhoa: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                    tenKhoa: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 50
+                    },
+                  
+                   
+                },
+                messages: {
+                    maKhoa: {
+                        required: "Vui lòng nhập Mã khoa",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 kí tự"
+                    },
+                    tenKhoa: {
+                        required: "Vui lòng nhập Tên khoa",
+                        minlength: "Chiều dài phải lớn hơn 1 ký tự",
+                        maxlength: "Chiều dài không vượt quá 50 ký tự"
+                    },
+                
+                    
+                },
+                errorElement: 'div',
+                errorLabelContainer: '.errorTxt',
+                submitHandler: function (form) {
+                }
+            });
+        }
+        $('#btnAdd').click(function () {
+            ResetForm();
+            $('#trangThai').hide();
+      
+            $('#hiddenvalue').val(''); // Hidden id
+            $('#modalKhoa').modal();
+        });
+        function Load_Danhsach_Khoa() {
+            $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+                   
+                    IDTruong: null,
+                    TuKhoa:null
+             
+
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        let stt = 0;
+
+                        $.each(data.khoa, function (key, value) {
+
+                             stt = stt + 1;
+
+                            let tr = '<tr id="' + value.idKhoa+ '">';
+                            tr += '<td>' + stt + '</td>';               
+                            tr += '<td>' + value.tenKhoa + '</td>';
+                            tr += '<td>' + value.maKhoa + '</td>';
+                            tr += '<td>' + value.tenTruong + '</td>';
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+                        });
+                  
+                    }
+                }
+            });
+        };
+
+        $('#btnSearch').click(function () {
+            let select1 = document.getElementById('timkiem-timtheoIDTruong');
+            let option1 = select1.options[select1.selectedIndex];
+            let idtruong = option1.value;
+            let tukhoa = $('#timkiem-timtheotukhoa').val();
+ 
+            $.ajax({
+                url: 'Khoa/DanhSach',
+                type: 'GET',
+                data: {
+                    IDTruong: idtruong,
+                    TuKhoa: tukhoa,
+              
+                },
+                success: function (data) {
+               if (data.code == 200) {
+                        let stt = 0;
+                        $('#table-body').empty();
+                        $.each(data.khoa, function (key, value) {
+                             stt = stt + 1;
+                            //Convert Datetime to String
+                            @*let today = new Date(value.ngayBanHanh);
+                            let dd = String(today.getDate()).padStart(2, '0');
+                            let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            let yyyy = today.getFullYear();
+                            today = dd + '/' + mm + '/' + yyyy;*@
+
+                              let tr = '<tr id="' + value.idKhoa+ '">';
+                            tr += '<td>' + stt + '</td>';               
+                            tr += '<td>' + value.tenKhoa + '</td>';
+                            tr += '<td>' + value.maKhoa + '</td>';
+                            tr += '<td>' + value.tenTruong + '</td>';
+                            tr += '<td>'
+                            tr += '<button class="btn btn-sm" name="edit" style="color:green"><i class="fa fa-info-circle"></i></button>';
+                            tr += '<button class="btn btn-sm" name="delete" style="color:red"><i class="fa fa-trash"></i></button>';
+                            tr += '</td>'
+                            tr += '</tr>'
+                            $('#table-body').append(tr);
+                        });
+                    }
+                }
+            });
+        });
+
+       function ThongBao(messenger) {
+            $("#notiMessenger").empty();
+            $("#notiMessenger").append(messenger);
+            $("#btnConfirm").hide();
+            $("#notification").modal();
+        };
+
+         $('#btnSubmit').click(function () {
+            let hiddenvalue = $('#hiddenvalue').val();
+
+            let tenKhoa = $('#tenKhoa').val().trim();
+            let maKhoa = $('#maKhoa').val().trim();
+            let IDTruong = $('#IDTruong').val().trim();
+           
+            //let trangThai = $('input[id="trangThai"]:checked').val();
+
+            let formData1 = new FormData();
+            formData1.append('maKhoa', maKhoa);
+  
+            formData1.append('tenKhoa', tenKhoa);
+             formData1.append('IDTruong', IDTruong);
+
+         
+
+            let formData2 = new FormData();
+            formData2 = formData1;
+            formData2.append('iDKhoa', hiddenvalue);
+                ThongBao(hiddenvalue);
+            //formData2.append('trangThai', trangThai);
+           
+          
+
+            if ($("#formKhoa").valid()) {
+                if (hiddenvalue.length == 0) {
+                    //Thêm mới
+                    $.ajax({
+                        url: '/Khoa/TaoMoi',
+                        type: 'POST',
+                        data: formData1,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                console.log(formData1);
+                                ResetForm();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                                $('#table-body').empty();
+                                Load_Danhsach_Khoa();
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    });
+                }
+                else if (hiddenvalue.length != 0) {
+                    //Chỉnh sửa
+                    //alert(ngayBanHanh);
+                    $.ajax({
+                        url: '/Khoa/ChinhSua',
+                        type: 'PUT',
+                        data: formData2,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                $('#table-body').empty();
+                                Load_Danhsach_Khoa();
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            } else {
+                                $('#btnClose').click();
+                                ThongBao(data.msg);
+                            }
+                        }
+                    })
+                }
+            }
+        });
+
+         $(document).on('click', "button[name='edit']", function () {
+            ResetForm();
+
+            //$('#trangThai').show();
+            let id = $(this).closest('tr').attr('id');
+            $('#hiddenvalue').val(id);
+
+
+            $.ajax({
+                url: '/Khoa/LayTheoID',
+                type: 'GET',
+                data: { id: id },
+                success: function (data) {
+                         $("#IDTruong").val(data.khoa.idTruong).change();
+                    $('#maKhoa').val(data.khoa.maKhoa);
+                    $('#tenKhoa').val(data.khoa.tenKhoa);
+                
+                 
+                    $('#modalKhoa').modal();
+                }
+            });
+  
+         });
+        $(document).on('click', "button[name='delete']", function () {
+            let id = $(this).closest('tr').attr('id');
+            var noti = confirm("Bạn có muốn xóa không?");
+            if (noti == true) {
+                $.ajax({
+                    url: 'Khoa/XoaBo',
+                    type: 'DELETE',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            $('#table-body').empty();
+                            Load_Danhsach_Khoa();
+                            ThongBao(data.msg);
+                        }
+                        else ThongBao(data.msg);
+                    }
+                })
+            } else {
+                alert("You pressed Cancel!");
+            }
+        });
+ 
+        function Load_DSTruong_Combobox() {
+            $.ajax({
+                url: 'Truong/DanhSach',
+                type: 'GET',
+                data: {
+             
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+            
+                        $.each(data.truong, function (key, value) {
+                            let option = '<option  value="' + value.idTruong + '" class="form-control">' +  value.tenTruong+ '</option>';
+                            $('#timkiem-timtheoIDTruong').append(option);
+                            $('#IDTruong').append(option);
+                        });
+                    }
+                }
+            });
+        };
+    </script>
+}
