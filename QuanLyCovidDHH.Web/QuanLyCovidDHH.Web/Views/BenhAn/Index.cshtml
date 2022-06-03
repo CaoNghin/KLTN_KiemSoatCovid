@@ -313,11 +313,14 @@
  
  
 
+   <input type="text" hidden id="SinhVien" value=@ViewData["IDSinhVien"] />
+
 @section scripts{
 
       
 
     <script>
+         let SinhVien = $('#SinhVien').val();
 
 
         $(document).ready(function () {
@@ -416,7 +419,7 @@
                 type: 'GET',
                 data: {
                     
-                    IDSinhVien:null,
+                    IDSinhVien:SinhVien,
                     IDKhoaHoc: null,
                     IDKhoa: null,
                     IDTruong: null,
@@ -815,7 +818,7 @@
             $('#hiddenvalue').val(id);
                  
 
-                   
+                  Load_DSSinhVien_Combobox(); 
              
              
             $.ajax({

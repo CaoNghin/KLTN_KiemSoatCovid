@@ -142,6 +142,7 @@
                                 </div>
                             </div>
                         </div>
+        
 
                           <div class="row">
                             <div class="col">
@@ -154,6 +155,17 @@
                                 </div>
                             </div>
                            
+                        </div>
+                           <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label">Vaccine</label>
+                                          
+                                     <select class="form-control" id="IDVaccine" >
+                                          
+                                     </select>
+                                </div>
+                            </div>
                         </div>
                          <div class="row">
                             <div class="col">
@@ -285,12 +297,14 @@
     <textarea class="form-control" rows=35 cols=120 id="xlx_json"></textarea>
  
  
+   <input type="text" hidden id="SinhVien" value=@ViewData["IDSinhVien"] />
 
 @section scripts{
 
       
 
     <script>
+         let SinhVien = $('#SinhVien').val();
 
 
         $(document).ready(function () {
@@ -362,6 +376,7 @@
              $('#IDKhoaAll').show();
              $('#IDKhoaHocAll').show();
             $('#hiddenvalue').val(''); // Hidden id
+                            $("#IDSinhVien").prop('disabled', false);
             $('#modalChiTietTiem').modal();
         });
         function Load_Danhsach_ChiTietTiem() {
@@ -372,7 +387,7 @@
                 type: 'GET',
                 data: {
                     IDVaccine:null,
-                    IDSinhVien:null,
+                    IDSinhVien:SinhVien,
                     IDKhoaHoc: null,
                     IDKhoa: null,
                     IDTruong: null,
@@ -549,13 +564,15 @@
         };
 
          $('#btnSubmit').click(function () {
+           
             let hiddenvalue = $('#hiddenvalue').val();
-
-
+                
         
 
             let IDVaccine = $('#IDVaccine').val().trim();
+   
             let IDSinhVien = $('#IDSinhVien').val().trim();
+
             let diaChiTiem = $('#diaChiTiem').val().trim();
             let trieuChungSauTiem = $('#trieuChungSauTiem').val().trim();
             let ngayGioTiem = $('#ngayGioTiem').val().trim();
@@ -593,7 +610,7 @@
             //formData2.append('trangThai', trangThai);
            
           
-
+          
             if ($("#formChiTietTiem").valid()) {
                 if (hiddenvalue.length == 0) {
                     //Thêm mới
@@ -658,7 +675,7 @@
                 $('#IDKhoaHocAll').hide();
                 $("#IDSinhVien").prop('disabled', true);
                    
-             
+             Load_DSSinhVien_Combobox();
              
             $.ajax({
                 url: '/ChiTietTiem/LayTheoID',

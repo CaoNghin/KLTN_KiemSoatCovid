@@ -20,10 +20,13 @@ namespace QuanLyCovidDHH.Web.Controllers
         {
             _webHostEnvironment = webHostEnvironment;
         }
-        public IActionResult Index()
+
+        public IActionResult Index(string IDSinhVien)
         {
+            ViewData["IDSinhVien"] = IDSinhVien;
             return View();
         }
+
         public JsonResult DanhSach( Guid? IDSinhVien,Guid? IDKhoaHoc, Guid? IDKhoa, Guid? IDTruong, string LoaiXetNghiem, string KetQuaXetNghiem, string Ngay, string TrangThaiDuyet)
         {
             var danhsach = new List<DanhSach>();

@@ -48,6 +48,8 @@
                         <i class="fa fa-search"></i>
                         <span>Tìm kiếm</span>
                     </a>
+                              
+                    
                 </div>
             </form>
         </div>
@@ -72,11 +74,46 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="text-center m-2" id="modal-title">SINH VIÊN</h2>
+                    <h2 class="text-center m-2" id="modal-title">SINH VIÊN</h2> 
+                
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+
                 </div>
+                
+                   <div  class="row">
+                            <div class="col">
+                                  <a class="btn btn-primary" id="btnKhaiBaoXetNghiem" href="KhaiBaoXetNghiem?IDSinhVien=12313">   
+                                    <i class="fa fa-external-link"></i>
+                                    <span>Đến khai báo xét nghiệm</span>
+                                </a>
+                            </div>
+                             <div class="col">
+                                  <a class="btn btn-primary" id="btnKhaiBaoCachLy" href="KhaiBaoCachLy?IDSinhVien=12313">   
+                                    <i class="fa fa-external-link"></i>
+                                    <span>Đến khai báo cách ly</span>
+                                </a>
+                            </div>
+                    </div>
+                 
+
+                   <div  class="row">
+                            <div class="col">
+                                  <a class="btn btn-primary" id="btnChiTietTiem" href="ChiTietTiem?IDSinhVien=12313">   
+                                    <i class="fa fa-external-link"></i>
+                                    <span>Đến chi tiết tiêm</span>
+                                </a>
+                            </div>
+                             <div class="col">
+                                  <a class="btn btn-primary" id="btnBenhAn" href="KhaiBaoCachLy?IDSinhVien=12313">   
+                                    <i class="fa fa-external-link"></i>
+                                    <span>Đến bệnh án</span>
+                                </a>
+                            </div>
+                    </div>
+                 
+                 
                 <form enctype="multipart/form-data" id="formSinhVien" method="post">
                     <div class="modal-body">
                         <input type="text" hidden id="hiddenvalue" value="" /> <!--Phân biệt nút Lưu lại trong Tạo mới và Chỉnh sửa-->
@@ -317,6 +354,11 @@
             $('#IDKhoaAll').show();
             $('#IDKhoaHocAll').show();
             $('#modalSinhVien').modal();
+            $('#btnKhaiBaoXetNghiem').hide();
+            $('#btnKhaiBaoCachLy').hide();
+            $('#btnChiTietTiem').hide();
+            $('#btnBenhAn').hide();
+
         });
         function Load_Danhsach_SinhVien() {
             TaoBang();  
@@ -560,6 +602,17 @@
                   
                 //      $('#trangThai').show();
                 //    $('#IDKhoaHoc').val(data.sinhvien.iDKhoaHoc);
+
+                    $('#btnKhaiBaoXetNghiem').show();
+                    $('#btnKhaiBaoCachLy').show();
+                    $('#btnChiTietTiem').show();
+                    $('#btnBenhAn').show();
+
+                    $('#btnKhaiBaoXetNghiem').attr('href', 'KhaiBaoXetNghiem?IDSinhVien='+id);
+                    $('#btnKhaiBaoCachLy').attr('href', 'KhaiBaoCachLy?IDSinhVien='+id);
+                    $('#btnChiTietTiem').attr('href', 'ChiTietTiem?IDSinhVien='+id);
+                    $('#btnBenhAn').attr('href', 'BenhAn?IDSinhVien='+id);
+                ///////////////////////////////////////////
 
                     $('#IDTruongAll').hide();
                     $('#IDKhoaAll').hide();

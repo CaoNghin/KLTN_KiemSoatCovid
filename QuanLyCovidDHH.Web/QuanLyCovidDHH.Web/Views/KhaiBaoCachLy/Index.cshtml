@@ -107,7 +107,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="text-center m-2" id="modal-title">Khai báo xét nghiệm</h2>
+                    <h2 class="text-center m-2" id="modal-title">Khai báo cách ly</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -201,7 +201,7 @@
                            
 
                                     <div class="form-group">
-                                    <label class="control-label">Hình ảnh xét nghiệm</label>
+                                    <label class="control-label"> Quyết định cách ly</label>
                                     <div class="file-info" id="file-info-1">
                                         <div class="file-icon"><i class="fa fa-file-word fa-2x"></i></div>
                                         <div class="file-content">
@@ -286,11 +286,14 @@
  
  
 
+   <input type="text" hidden id="SinhVien" value=@ViewData["IDSinhVien"] />
+
 @section scripts{
 
       
 
     <script>
+         let SinhVien = $('#SinhVien').val();
 
 
         $(document).ready(function () {
@@ -388,7 +391,7 @@
                 type: 'GET',
                 data: {
 
-                    IDSinhVien:null,
+                    IDSinhVien:SinhVien,
                     IDKhoaHoc: null,
                     IDKhoa: null,
                     IDTruong: null,
@@ -695,7 +698,7 @@
                 $('#IDKhoaHocAll').hide();
                 $("#IDSinhVien").prop('disabled', true);
                    
-             
+             Load_DSSinhVien_Combobox();
              
             $.ajax({
                 url: '/KhaiBaoCachLy/LayTheoID',

@@ -7,8 +7,9 @@
 <div class="table--database">
     <div class="container">
         <div class="section--title">
-            <h3>DANH SÁCH THÔNG TIN KHAI BÁO XÉT NGHIỆM</h3>
+            <h3>DANH SÁCH THÔNG TIN KHAI BÁO XÉT NGHIỆM </h3>
             <hr />
+ 
             <form>
                 <div class="row">
                     <div class="col">
@@ -299,13 +300,19 @@
     <textarea class="form-control" rows=35 cols=120 id="xlx_json"></textarea>
  
  
+ 
+ 
+ 
+   <input type="text" hidden id="SinhVien" value=@ViewData["IDSinhVien"] />
 
 @section scripts{
 
       
 
     <script>
+         let SinhVien = $('#SinhVien').val();
 
+   
 
         $(document).ready(function () {
               
@@ -395,13 +402,13 @@
         });
         function Load_Danhsach_KhaiBaoXetNghiem() {
             TaoBang();
-
+            
             $.ajax({
                 url: 'KhaiBaoXetNghiem/DanhSach',
                 type: 'GET',
                 data: {
 
-                    IDSinhVien:null,
+                    IDSinhVien:SinhVien,
                     IDKhoaHoc: null,
                     IDKhoa: null,
                     IDTruong: null,
@@ -694,7 +701,7 @@
                 $('#IDKhoaHocAll').hide();
                 $("#IDSinhVien").prop('disabled', true);
                    
-             
+          Load_DSSinhVien_Combobox();
              
             $.ajax({
                 url: '/KhaiBaoXetNghiem/LayTheoID',
